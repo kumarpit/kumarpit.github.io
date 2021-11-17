@@ -41,6 +41,9 @@
     --clr-light: #fff;
     --clr-dark: #1b1a1a;
     --clr-accent: lightskyblue;
+    --clr-github: #2dba49;
+    --clr-linkedin: #5da8e9;
+    --clr-email: #ea4c89;
 
     --fs-h1: 3rem;
     --fs-h2: 2.25rem;
@@ -85,13 +88,14 @@ section {
 
 .section__subtitle {
     font-weight: 500;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 .ubc {
     position: relative;
     font-weight: bold;
     /* color: #e7ad2a; */
+    /* color: #ff8a00; */
     color: #ff8a00;
 }
 
@@ -172,6 +176,12 @@ section {
 
 }
 
+.nav button i:hover {
+    color: #ff8a00;
+    opacity: 1;
+    cursor: pointer;
+}
+
 /* Landing */
 
 .social-list {
@@ -192,25 +202,19 @@ section {
     font-weight: 600;
 }
 
-.social-list__link--github {
-    color: #3ed457;
-}
+.social-list__link--github { color: var(--clr-github); }
 
-.social-list__link--linkedin {
-    color: #0a66c2;
-}
+.social-list__link--linkedin { color: var(--clr-linkedin); }
 
-.social-list__link--email {
-    color: #ea4c89;
-}
+.social-list__link--email { color: var(--clr-email); }
 
 .social-list__item + .social-list__item {
     margin-left:2em;
 }
 
-.fa-github { color: #3ed457 }
-.fa-linkedin { color: #0a66c2 }
-.fa-email { color:#ea4c89 }
+.fa-github { color: var(--clr-github) }
+.fa-linkedin { color: var(--clr-linkedin) }
+.fa-email { color:var(--clr-email) }
 
 .social-list__item::before {
     content: '';
@@ -230,6 +234,6 @@ section {
     cursor: pointer;
 }
 
-.social-list__item--github::before { background-color: #3ed457; }
-.social-list__item--linkedin::before { background-color: #0a66c2; }
-.social-list__item--email::before { background-color: #ea4c89; }
+.social-list__item--github::before { background-color: var(--clr-github); }
+.social-list__item--linkedin::before { background-color: var(--clr-linkedin); }
+.social-list__item--email::before { background-color: var(--clr-email); }
