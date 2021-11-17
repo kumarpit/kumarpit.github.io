@@ -50,6 +50,8 @@
     --fs-h3: 1.25rem;
     --fs-body: 1rem;
 
+    --vp-width: 65%;
+
     --br: .5em;
 }
 
@@ -67,6 +69,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-y: hidden;
 }
 
 body {
@@ -80,7 +83,7 @@ body {
 
 section {
     padding: 0 2em 5em 2em;
-    max-width: 70%;
+    max-width: var(--vp-width);
     margin: 0 auto;
 }
 
@@ -138,7 +141,7 @@ section {
 .nav {
     display: flex;
     justify-content: space-between;
-    width: 70%;
+    max-width: var(--vp-width);
     margin: 0 auto;
     padding: 1em 4em 0 0;
 }
