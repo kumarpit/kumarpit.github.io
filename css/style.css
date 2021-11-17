@@ -121,6 +121,14 @@ section {
     background-color: #809cff;
 }
 
+.tech-stack {
+    color: red;
+}
+
+.tech-stack::before {
+    background-color: red;
+}
+
 /* Navbar / Header */
 
 .nav {
