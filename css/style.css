@@ -1,0 +1,135 @@
+/* Font Face Declarations */
+
+@font-face {
+    font-family: EudoxusSans;
+    src: url(../fonts/EudoxusSans-Regular.woff);
+}
+
+@font-face {
+    font-family: EudoxusSans;
+    src: url(../fonts/EudoxusSans-Light.woff);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: EudoxusSans;
+    src: url(../fonts/EudoxusSans-Medium.woff);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: EudoxusSans;
+    src: url(../fonts/EudoxusSans-Bold.woff);
+    font-weight: 600;
+}
+
+/* init */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --ff-primary: EudoxusSans;
+    /* --ff-secondary: 'Inter', sans-serif; */
+
+    --fw-reg: 300;
+    --fw-bold: 900;
+
+    --clr-light: #fff;
+    --clr-dark: #1b1a1a;
+    --clr-accent: lightskyblue;
+
+    --fs-h1: 3rem;
+    --fs-h2: 2.25rem;
+    --fs-h3: 1.25rem;
+    --fs-body: 1rem;
+
+    --br: .5em;
+}
+
+@media (min-width: 800px) {
+    :root {
+        --fs-h1: 4.5rem;
+        --fs-h2: 3.75rem;
+        --fs-h3: 1.5rem;
+        --fs-body: 1.125rem;
+    }
+}
+
+
+/* General Styles */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--clr-dark);
+    color: var(--clr-light);
+    margin: 0;
+    font-family: var(--ff-primary);
+    font-size: var(--fs-body);
+    line-height: 1.6;
+}
+
+section {
+    padding: 0 2em 5em 2em;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+
+/* Typography */
+
+.section__subtitle {
+    font-weight: 500;
+    font-size: 1.2em;
+}
+
+
+/* Navbar / Header */
+
+.nav__list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 80%;
+    margin: 0 auto;
+    padding: 2em 1em;
+}
+
+.nav__item {
+    margin: 10px;
+}
+
+.nav__link {
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--clr-light);
+}
+
+/* Landing */
+
+.social-list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    padding: 1em 1em;
+}
+
+.social-list__item {
+    font-size: 2em;
+}
+
+.social-list__item + .social-list__item {
+    margin-left: 1em;
+}
+
+.fab,
+.fas {
+    color: var(--clr-light);
+}
