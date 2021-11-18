@@ -38,7 +38,7 @@
     --fw-reg: 300;
     --fw-bold: 900;
 
-    --clr-light: #fff;
+    --clr-light: #fcfcfc;
     --clr-dark: #1b1a1a;
     --clr-accent: lightskyblue;
     --clr-github: #2dba49;
@@ -78,7 +78,7 @@ body {
     margin: 0;
     font-family: var(--ff-primary);
     font-size: var(--fs-body);
-    line-height: 1.6;
+    line-height: 1.4;
 }
 
 section {
