@@ -19,7 +19,7 @@
 
 @font-face {
     font-family: EudoxusSans;
-    src: url(../fonts/EudoxusSans-Bold.woff);
+    src: url(../fonts/EudoxusSans-ExtraBold.woff);
     font-weight: 600;
 }
 
@@ -92,7 +92,7 @@ section {
 
 .section__subtitle {
     font-weight: 500;
-    font-size: 1.1em;
+    font-size: 1.2rem;
 }
 
 .ubc {
