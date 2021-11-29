@@ -61,8 +61,8 @@
     --fw-reg: 'normal';
     --fw-bold: 'bold';
 
-    --clr-light: #f0f2f4;
-    --clr-dark: #151515;
+    --clr-dark: #f0f2f4;
+    --clr-light: #151515;
     --clr-accent: lightskyblue;
 
     --fs-h1: 2.1em;
@@ -362,7 +362,8 @@ header {
 }
 
 .social-list__item--linkedin {
-    background-color: #0495ff;
+    /* background-color: #0495ff; */
+    background-color: #0073b1;
 }
 
 .social-list__item--resume {
@@ -494,7 +495,8 @@ header {
 }
 
 .social-item--linkedin {
-    background-color: #0495ff;
+    /* background-color: #0495ff; */
+    background-color: #0073b1;
 }
 
 .social-item--resume {
