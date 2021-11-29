@@ -48,8 +48,7 @@
 /* Vars */
 
 :root {
-    --ff-primary: 'Jakarta Plus', sans-serif;
-    --ff-secondary: 'Eudoxus Sans', sans-serif;
+    --ff-primary: 'Jakarta Plus', system-ui, sans-serif;
 
     --fw-reg: 'normal';
     --fw-bold: 'bold';
