@@ -61,8 +61,8 @@
     --fw-reg: 'normal';
     --fw-bold: 'bold';
 
-    --clr-dark: #f0f2f4;
-    --clr-light: #151515;
+    --clr-light: #f0f2f4;
+    --clr-dark: #151515;
     --clr-accent: lightskyblue;
 
     --fs-h1: 2.1em;
@@ -120,12 +120,33 @@ a {
     text-decoration: none;
 }
 
-a:hover {
+/* a:hover {
     text-decoration: underline;
-}
+} */
 
 .github-link {
+    position: relative;
+    padding: 1px 3px;
     color: #1aba43;
+}
+
+.github-link::before {
+    content: '';
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #1aba43;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.github-link:hover::before {
+    visibility: visible;
+    cursor: pointer;
 }
 
 .site-link {
@@ -218,15 +239,79 @@ header {
 }
 
 .ubc {
-    color: #f1d226;
+    position: relative;
+    padding: 1px 3px;
+    color: #ffa800;
+}
+
+.ubc::before {
+    content: '';
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ffa800;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.ubc:hover::before {
+    cursor: pointer;
+    visibility: visible;
 }
 
 .lp {
+    position: relative;
+    padding: 1px 3px;
     color: #809cff;
 }
 
+.lp::before {
+    content: '';
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #809cff;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.lp:hover::before {
+    cursor: pointer;
+    visibility: visible;
+}
+
 .tech-stack {
+    position: relative;
+    padding: 1px 3px;
     color: red;
+}
+
+.tech-stack::before {
+    content: '';
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: red;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+
+}
+
+.tech-stack:hover::before {
+    cursor: pointer;
+    visibility: visible;
 }
 
 
@@ -265,7 +350,7 @@ header {
     text-decoration: none;
     font-size: var(--fs-body);
     padding: 0.5em 0;
-    font-weight: 800;
+    font-weight: bold;
 }
 
 .social-list__link--text {
