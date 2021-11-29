@@ -53,8 +53,8 @@
     --fw-reg: 'normal';
     --fw-bold: 'bold';
 
-    --clr-light: #fff;
-    --clr-dark: #151515;
+    --clr-dark: #f0f2f4;
+    --clr-light: #151515;
     --clr-accent: lightskyblue;
 
     --fs-h1: 2.1em;
@@ -161,11 +161,11 @@ header {
 
 .nav__link {
     color: var(--clr-light);
-    font-weight: bold;
+    font-weight: 800;
     text-decoration: none;
     font-size: 1em;
     color: var(--clr-light);
-    opacity: 0.2;
+    opacity: 0.3;
 }
 
 .theme-toggle {
@@ -281,7 +281,7 @@ header {
 }
 
 .social-list__link {
-    color: white;
+    color: #f0f2f4;
 }
 
 /* About */
@@ -388,6 +388,10 @@ header {
 
 .footer__text {
     margin: 0;
+}
+
+.social-item {
+    color: #f0f2f4;
 }
 
 .social-item--github {
