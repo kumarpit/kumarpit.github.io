@@ -20,9 +20,9 @@
                     <li class="nav__item"><a href="#" class="nav__link">experience</a></li>
                     <li class="nav__item"><a href="#" class="nav__link">projects</a></li>
                     <li class="nav__item"><a href="#" class="nav__link">blog</a></li>
-                    <li class="nav__item nav__item--resume"><a href="#" class="nav__link">resume</a></li>
+                    <!-- <li class="nav__item nav__item--resume"><a href="#" class="nav__link">resume</a></li> -->
                 </ul>
-                <button><i class="far fa-lightbulb"></i></button>
+                <button class="theme-toggle"><span class="emoji">&#9728</span></button>
             </nav>
         </header>
 
@@ -30,23 +30,42 @@
         <section class="landing">
             <h1 class="section__title section__title--landing">Hey! I'm Arpit <span class="emoji">&#128075</span></h1>
             
-            <h2 class="section__subtitle section__subtitle--landing">I'm studying Computer Science at the<span class="ubc"> University of British Columbia. </span></h2> 
+            <p class="section__subtitle section__subtitle--landing">I'm studying Computer Science at the <span class="highlighted-text ubc"> University of British Columbia.</span> </p> 
             
-            <h2 class="section__subtitle section__subtitle--landing">I'm currently a software developer in a team at <span class="ubc lp"> UBC Launch Pad </span> where I am working on creating a daily finance management app using the <span class="ubc tech-stack">FARM</span> stack.</h2>
+            <p class="section__subtitle section__subtitle--landing">I'm currently a software developer in a team a <span class="highlighted-text lp"> UBC Launch Pad </span> where I am working on creating a daily finance management app using the <span class="highlighted-text tech-stack">FARM</span> stack.</p>
             
-            <h2 class="section__subtitle section__subtitle--landing">Currently, I am focussing on mastering software design fundamentals.</h2>
+            <p class="section__subtitle section__subtitle--landing">Currently, I am focussing on mastering software design fundamentals.</p>
             
-            <h2 class="section__subtitle section__subtitle--landing">Let's chat about sports, sci-fi and project ideas!</h2>
+            <p class="section__subtitle section__subtitle--landing">Let's chat about sports, sci-fi and project ideas!</p>
             
             <ul class="social-list">
                 <li class="social-list__item social-list__item--github">
-                    <a href="#" class="social-list__link social-list__link--github"><i class="fab fa-github"></i> Github </a>
+                    <a href="#" class="social-list__link social-list__link--github">
+                        <i class="fab fa-github"></i>
+                        Github
+                        <span class="social-list__link--text">Github</span>
+                    </a>
                 </li>
                 <li class="social-list__item social-list__item--linkedin">
-                    <a href="#" class="social-list__link social-list__link--linkedin"><i class="fab fa-linkedin"></i> Linkedin </a>
+                    <a href="#" class="social-list__link social-list__link--linkedin">
+                        <i class="fab fa-linkedin"></i>
+                        Linkedin
+                        <span class="social-list__link--text">Linkedin</span>
+                    </a>
+                </li>
+                <li class="social-list__item social-list__item--resume">
+                    <a href="#" class="social-list__link social-list__link--resume">
+                        <i class="fas fa-file"></i> 
+                        Resume
+                        <span class="social-list__link--text">Resume</span> 
+                    </a>
                 </li>
                 <li class="social-list__item social-list__item--email">
-                    <a href="#" class="social-list__link social-list__link--email"><i class="fas fa-envelope"></i> Email </a>
+                    <a href="#" class="social-list__link social-list__link--email">
+                        <i class="fas fa-at"></i> 
+                        Email
+                        <span class="social-list__link--text">Email</span>
+                    </a>
                 </li>
             </ul>
         </section>
@@ -54,120 +73,154 @@
 
         <!-- About -->
         <section class="about">
-            <h1 class="section__title">About</h1>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, voluptatem pariatur molestias unde commodi minus quis cumque nisi, quibusdam eum ad nesciunt autem aperiam. Similique quam inventore laudantium facilis laborum. Voluptate laborum hic corporis ullam facilis distinctio veniam facere sunt non numquam ipsam aut voluptatum, maiores, eos perferendis et ad cumque! Architecto rerum illo quisquam explicabo nulla neque molestias. Libero quaerat asperiores similique iure rerum aperiam cum ducimus praesentium minus deleniti cumque quis hic perferendis tempora dolorem quia quas nulla autem nihil unde labore, delectus sint. Nam earum fugiat, repellat qui accusamus error blanditiis, autem quibusdam neque, doloremque laborum hic.</p>
+            <h1 class="section__title sectoin__title--about">About</h1>
+            <p class="section__subtitle section__subtitle--about">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, voluptatem pariatur molestias unde commodi minus quis cumque nisi, quibusdam eum ad nesciunt autem aperiam. Similique quam inventore laudantium facilis laborum. Voluptate laborum hic corporis ullam facilis distinctio veniam facere sunt non numquam ipsam aut voluptatum, maiores, eos perferendis et ad cumque! Architecto rerum illo quisquam explicabo nulla neque molestias. Libero quaerat asperiores similique iure rerum aperiam cum ducimus praesentium minus deleniti cumque quis hic perferendis tempora dolorem quia quas nulla autem nihil unde labore, delectus sint. Nam earum fugiat, repellat qui accusamus error blanditiis, autem quibusdam neque, doloremque laborum hic.</p>
+
+            <!-- skills section within about -->
         </section>
 
         <!-- Experience -->
         <section class="experience">
             <h1 class="section__title section__title--experience">Experience</h1>
 
-            <!-- <div class="dropdown-box dropdown-box--experience"> 
-                <h2>Software Developer</h2>
-                <h2>UBC Visual Cognition Lab</h2>
-                <a href="#">my contributions</a>
-                <i class="fas fa-chevron-down"></i>
-            </div> -->
+            <div class="experience-box temp">
+                <div class="experience__heading">
+                    <div class="experience__title">
+                        <h3>UBC Launch Pad</h3>
+                        <h3>Software Developer</h3>
+                    </div>
+                    <a href="#" class="experience__link">contributions</a>
+                </div>
 
-            <div class="dropdown-box dropdown-box--experience"> 
-                <h2>Software Developer</h2>
-                <h2>UBC Launch Pad</h2>
-                <a href="#">my contributions</a>
-                <i class="fas fa-chevron-down"></i>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, libero. At nesciunt vitae itaque autem nostrum! Enim rem ex vel sed, ut beatae fugit libero ipsam consequatur nulla porro necessitatibus?</p>
             </div>
 
-            <div class="dropdown-box dropdown-box--experience"> 
-                <h2>Freelance Developer</h2>
-                <h2>GDGWS</h2>
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
+            <div class="experience-box">
+                <div class="experience__heading">
+                    <div class="experience__title">
+                        <h3>GDGWS</h3>
+                        <h3>Freelance Developer</h3>
+                    </div>
+                    <a href="#" class="experience__link">github</a>
+                </div>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, libero. At nesciunt vitae itaque autem nostrum! Enim rem ex vel sed, ut beatae fugit libero ipsam consequatur nulla porro necessitatibus?</p>
             </div>
         </section>
 
         <!-- Projects -->
         <section class="projects">
             <h1 class="section__title section__title--projects">Projects</h1>
-
+    
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>Hairy</h2>
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
+                <div class="links">
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
 
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>YouTube Library</h2>
-                <a href="#">site</a>
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
+                <div class="links">
+                    <a href="#">site</a>
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
 
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>DeskTime</h2>
                 <!-- like rescueTime -->
-                <a href="#">site</a>
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
+                <div class="links">
+                    <a href="#">site</a>
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
 
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>Fitness Logger</h2>
-                <!-- customizable fitness logger, custom sets reps blocks -->
+            <!-- <div class="dropdown-box dropdown-box--projects"> 
+                <h2>EasyUML</h2>
                 <a href="#">site</a>
                 <a href="#">github</a>
                 <i class="fas fa-chevron-down"></i>
+            </div> -->
+
+            <div class="dropdown-box dropdown-box--projects"> 
+                <h2>Grow</h2>
+                <!-- minimal fitness logging application, custom sets reps blocks -->
+                <div class="links">
+                    <a href="#">site</a>
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
 
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>Notebook</h2> 
                 <!-- github for notes, pastebin of notes -->
-                <a href="#">site</a>
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
+                <div class="links">
+                    <a href="#">site</a>
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
 
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>Arcade</h2>
-                <a href="#">site</a>
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
+                <div class="links">
+                    <a href="#">site</a>
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
 
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>Themes for Canvas (UBC)</h2>
-                <a href="#">chrome</a>
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
+                <div class="links">
+                    <a href="#">chrome</a>
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
 
             <div class="dropdown-box dropdown-box--projects"> 
-                <h2>ScanThis</h2> 
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
+                <h2>Scanned</h2> 
+                <div class="links">
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <div class="dropdown-box dropdown-box--projects"> 
+                <h2>5/3/1 Workout Generator</h2> 
+                <div class="links">
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
 
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>This Website</h2>
-                <a href="#">site</a>
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
+                <div class="links">
+                    <a href="#">site</a>
+                    <a href="#">github</a>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
             </div>
         </section>
 
+        <!-- <div class="spacer"></div> -->
 
         <!-- Footer -->
         <footer class="footer">
-            <h3 class="footer__text">made by Arpit Kumar, © 2021</h3>
-            <ul class="social-list">
-                <li class="social-list__item social-list__item--github">
-                    <a href="#" class="social-list__link social-list__link--github"><i class="fab fa-github"></i> Github </a>
-                </li>
-                <li class="social-list__item social-list__item--linkedin">
-                    <a href="#" class="social-list__link social-list__link--linkedin"><i class="fab fa-linkedin"></i> Linkedin </a>
-                </li>
-                <li class="social-list__item social-list__item--email">
-                    <a href="#" class="social-list__link social-list__link--email"><i class="fas fa-envelope"></i> Email </a>
-                </li>
+            <ul class="social-list--footer">
+                <li class="social-item social-item--github"><i class="fab fa-github"></i></li>
+                <li class="social-item social-item--linkedin"><i class="fab fa-linkedin"></i></li>
+                <li class="social-item social-item--resume"><i class="fas fa-file"></i> </li>
+                <li class="social-item social-item--email"><i class="fas fa-at"></i> </li>
             </ul>
+            <p class="footer__text">made by Arpit Kumar, © 2021</p>
         </footer>
     </body>
 </html>

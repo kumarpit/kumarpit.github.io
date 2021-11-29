@@ -1,4 +1,354 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+/* Fonts */
+
+@font-face {
+    font-family: 'Jakarta Plus';
+    src: url("/fonts/PlusJakartaSans-2.6/webfonts/PlusJakartaSans-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Jakarta Plus';
+    src: url("/fonts/PlusJakartaSans-2.6/webfonts/PlusJakartaSans-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Jakarta Plus';
+    src: url("/fonts/PlusJakartaSans-2.6/webfonts/PlusJakartaSans-Light.woff") format("woff");
+    font-weight: 300;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Jakarta Plus';
+    src: url("/fonts/PlusJakartaSans-2.6/webfonts/PlusJakartaSans-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Jakarta Plus';
+    src: url("/fonts/PlusJakartaSans-2.6/webfonts/PlusJakartaSans-ExtraBold.woff") format("woff");
+    font-weight: 800;
+    font-style: normal;
+    font-display: block;
+}
+
+/* Vars */
+
+:root {
+    --ff-primary: 'Jakarta Plus', sans-serif;
+    --ff-secondary: 'Eudoxus Sans', sans-serif;
+
+    --fw-reg: 'normal';
+    --fw-bold: 'bold';
+
+    --clr-light: #fff;
+    --clr-dark: #1b1a1a;
+    --clr-accent: lightskyblue;
+
+    --fs-h1: 2.1em;
+    --fs-h2: 2em;
+    --fs-h3: 1.25em;
+    --fs-body: 1.1em;
+
+    --br: .5em;
+}
+
+/* General */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--clr-dark);
+    color: var(--clr-light);
+    margin: 0;
+    font-family: var(--ff-primary);
+    font-size: var(--fs-body);
+    line-height: 1.4;
+}
+
+section {
+    padding: 2em 7%;
+}
+
 .emoji {
     font-family: "Segoe UI Emoji";
     font-weight: normal; 
+}
+
+
+/* Typography */
+
+.section__title {
+    font-weight: 800;
+    font-size: var(--fs-h1);
+}
+
+.section__subtitle {
+    font-size: var(--fs-body);
+    font-weight: 500;
+}
+
+
+/* Navigation */
+
+header {
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+}
+
+.nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 86%;
+}
+
+.nav__list {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+}
+
+.nav__item + .nav__item {
+    margin-left: 10px;
+}
+
+.nav__link {
+    color: var(--clr-light);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.theme-toggle {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5em;
+}
+
+/* Landing */
+
+.landing {
+    padding-top: 0.5em;
+}
+
+.highlighted-text {
+    font-weight: bold;
+}
+
+.ubc {
+    color: #f1d226;
+}
+
+.lp {
+    color: #809cff;
+}
+
+.tech-stack {
+    color: red;
+}
+
+
+/* Landing -- Social List */
+
+.social-list {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    width: 90%;
+    row-gap: 0.7em;
+    column-gap: 1em;
+    list-style: none;
+    padding: 0;
+    margin-top: 2em;
+}
+
+/* .social-list__item {
+    padding: 0.5em 0;
+} */
+
+.social-list__item {
+    display: flex;
+    justify-content: center;
+    border-radius: 5em;
+    padding: 0 1em;
+    margin: 0;
+}
+
+.social-list__link {
+    text-decoration: none;
+    font-size: var(--fs-h3);
+    padding: 0.5em 0;
+    font-weight: 800;
+}
+
+.social-list__link--text {
+    display: none;
+}
+
+.social-list__item--github {
+    background-color: #1aba43;
+}
+
+.social-list__item--linkedin {
+    background-color: #0495ff;
+}
+
+.social-list__item--resume {
+    background-color: #ffa800;
+}
+
+.social-list__item--email {
+    background-color: #ea4c89;
+}
+
+.social-list__link {
+    color: white;
+}
+
+/* About */
+
+.section__subtitle--about {
+    font-size: var(--fs-body);
+}
+
+/* Experience */
+
+.experience-box {
+    width: 100%;
+}
+
+.temp {
+    margin-bottom: 2em;
+}
+
+.experience__heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.experience__title h3 {
+    font-weight: 800;
+    font-size: var(--fs-body);
+    margin: 0;
+}
+
+.experience__link {
+    font-weight: bold;
+    /* color: #ffa800; */
+    /* color: #fdfd96; */
+}
+
+/* Projects */
+
+.projects {
+    width:100%;
+}
+
+.dropdown-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+}
+
+.dropdown-box h2 {
+    font-size: var(--fs-h3);
+    max-width: 50%;
+}
+
+.links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.links a {
+    font-weight: bold;
+    /* color: #fdfd96; */
+    padding: 0 0.2em;
+}
+
+.links i {
+    padding-left: 0.8em;
+}
+
+/* .spacer {
+    aspect-ratio: 960/300;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: url(/imgs/layered-waves-haikei.svg);
+} */
+
+/* footer */
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.social-list--footer {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+
+
+.social-item {
+    list-style: none;
+    font-size: var(--fs-h3);
+    padding: 0.5em 0.8em;
+}
+
+.footer__text {
+    margin: 0;
+}
+
+.social-item--github {
+    background-color: #1aba43;
+    border-top-left-radius: 0.4em;
+    border-bottom-left-radius: 0.4em;
+}
+
+.social-item--linkedin {
+    background-color: #0495ff;
+}
+
+.social-item--resume {
+    background-color: #ffa800;
+}
+
+.social-item--email {
+    background-color: #ea4c89;
+    border-top-right-radius: 0.4em;
+    border-bottom-right-radius: 0.4em;
+}
+
+.footer__text {
+    font-size: 0.8em;
+    font-weight: 300;
+    margin: 1em 0;
 }
