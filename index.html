@@ -16,9 +16,9 @@
         <header>
             <nav class="nav">
                 <ul class="nav__list">
-                    <li class="nav__item"><a href="#" class="nav__link">about</a></li>
-                    <li class="nav__item"><a href="#" class="nav__link">experience</a></li>
-                    <li class="nav__item"><a href="#" class="nav__link">projects</a></li>
+                    <li class="nav__item"><a href="#about" class="nav__link">about</a></li>
+                    <li class="nav__item"><a href="#experience" class="nav__link">experience</a></li>
+                    <li class="nav__item"><a href="#projects" class="nav__link">projects</a></li>
                     <li class="nav__item"><a href="#" class="nav__link">blog</a></li>
                     <!-- <li class="nav__item nav__item--resume"><a href="#" class="nav__link">resume</a></li> -->
                 </ul>
@@ -72,7 +72,7 @@
 
 
         <!-- About -->
-        <section class="about">
+        <section class="about" id="about">
             <h1 class="section__title sectoin__title--about">About</h1>
             <p class="section__subtitle section__subtitle--about">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, voluptatem pariatur molestias unde commodi minus quis cumque nisi, quibusdam eum ad nesciunt autem aperiam. Similique quam inventore laudantium facilis laborum. Voluptate laborum hic corporis ullam facilis distinctio veniam facere sunt non numquam ipsam aut voluptatum, maiores, eos perferendis et ad cumque! Architecto rerum illo quisquam explicabo nulla neque molestias. Libero quaerat asperiores similique iure rerum aperiam cum ducimus praesentium minus deleniti cumque quis hic perferendis tempora dolorem quia quas nulla autem nihil unde labore, delectus sint. Nam earum fugiat, repellat qui accusamus error blanditiis, autem quibusdam neque, doloremque laborum hic.</p>
 
@@ -80,7 +80,7 @@
         </section>
 
         <!-- Experience -->
-        <section class="experience">
+        <section class="experience" id="experience">
             <h1 class="section__title section__title--experience">Experience</h1>
 
             <div class="experience-box temp">
@@ -89,7 +89,7 @@
                         <h3>UBC Launch Pad</h3>
                         <h3>Software Developer</h3>
                     </div>
-                    <a href="#" class="experience__link">contributions</a>
+                    <a href="#" class="experience__link contributions-link">contributions</a>
                 </div>
 
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, libero. At nesciunt vitae itaque autem nostrum! Enim rem ex vel sed, ut beatae fugit libero ipsam consequatur nulla porro necessitatibus?</p>
@@ -101,7 +101,7 @@
                         <h3>GDGWS</h3>
                         <h3>Freelance Developer</h3>
                     </div>
-                    <a href="#" class="experience__link">github</a>
+                    <a href="#" class="experience__link github-link">github</a>
                 </div>
 
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, libero. At nesciunt vitae itaque autem nostrum! Enim rem ex vel sed, ut beatae fugit libero ipsam consequatur nulla porro necessitatibus?</p>
@@ -109,13 +109,13 @@
         </section>
 
         <!-- Projects -->
-        <section class="projects">
+        <section class="projects" id="projects">
             <h1 class="section__title section__title--projects">Projects</h1>
     
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>Hairy</h2>
                 <div class="links">
-                    <a href="#">github</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -123,8 +123,8 @@
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>YouTube Library</h2>
                 <div class="links">
-                    <a href="#">site</a>
-                    <a href="#">github</a>
+                    <a href="#" class="site-link">site</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -133,25 +133,18 @@
                 <h2>DeskTime</h2>
                 <!-- like rescueTime -->
                 <div class="links">
-                    <a href="#">site</a>
-                    <a href="#">github</a>
+                    <a href="#" class="site-link">site</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
-
-            <!-- <div class="dropdown-box dropdown-box--projects"> 
-                <h2>EasyUML</h2>
-                <a href="#">site</a>
-                <a href="#">github</a>
-                <i class="fas fa-chevron-down"></i>
-            </div> -->
 
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>Grow</h2>
                 <!-- minimal fitness logging application, custom sets reps blocks -->
                 <div class="links">
-                    <a href="#">site</a>
-                    <a href="#">github</a>
+                    <a href="#" class="site-link">site</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -160,8 +153,8 @@
                 <h2>Notebook</h2> 
                 <!-- github for notes, pastebin of notes -->
                 <div class="links">
-                    <a href="#">site</a>
-                    <a href="#">github</a>
+                    <a href="#" class="site-link">site</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -169,8 +162,8 @@
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>Arcade</h2>
                 <div class="links">
-                    <a href="#">site</a>
-                    <a href="#">github</a>
+                    <a href="#" class="site-link">site</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -178,8 +171,8 @@
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>Themes for Canvas (UBC)</h2>
                 <div class="links">
-                    <a href="#">chrome</a>
-                    <a href="#">github</a>
+                    <a href="#" class="chrome-link">chrome</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -187,7 +180,7 @@
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>Scanned</h2> 
                 <div class="links">
-                    <a href="#">github</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -195,7 +188,7 @@
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>5/3/1 Workout Generator</h2> 
                 <div class="links">
-                    <a href="#">github</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -203,8 +196,8 @@
             <div class="dropdown-box dropdown-box--projects"> 
                 <h2>This Website</h2>
                 <div class="links">
-                    <a href="#">site</a>
-                    <a href="#">github</a>
+                    <a href="#" class="site-link">site</a>
+                    <a href="#" class="github-link">github</a>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -217,8 +210,8 @@
             <ul class="social-list--footer">
                 <li class="social-item social-item--github"><i class="fab fa-github"></i></li>
                 <li class="social-item social-item--linkedin"><i class="fab fa-linkedin"></i></li>
-                <li class="social-item social-item--resume"><i class="fas fa-file"></i> </li>
-                <li class="social-item social-item--email"><i class="fas fa-at"></i> </li>
+                <li class="social-item social-item--resume"><i class="fas fa-file"></i></li>
+                <li class="social-item social-item--email"><i class="fas fa-at"></i></li>
             </ul>
             <p class="footer__text">made by Arpit Kumar, © 2021</p>
         </footer>
