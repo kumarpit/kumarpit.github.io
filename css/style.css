@@ -54,7 +54,7 @@
     --fw-bold: 'bold';
 
     --clr-light: #fff;
-    --clr-dark: #1b1a1a;
+    --clr-dark: #151515;
     --clr-accent: lightskyblue;
 
     --fs-h1: 2.1em;
@@ -110,6 +110,10 @@ section {
 
 a {
     text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 .github-link {
@@ -183,6 +187,7 @@ header {
     .nav__link:hover {
         opacity: 1;
         color: #ffa800;
+        text-decoration: none;
     }
 
     .theme-toggle {
@@ -326,7 +331,8 @@ header {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    border-bottom: 2px solid rgba(255,255,255,0.3);
+    /* border-bottom: 2px solid var(--clr-light); */
+    border-bottom: 1px solid var(--clr-light);
 }
 
 .dropdown-box h2 {
