@@ -85,7 +85,7 @@ body {
     margin: 0;
     font-family: var(--ff-primary);
     font-size: var(--fs-body);
-    line-height: 1.4;
+    line-height: 1.5;
 }
 
 section {
@@ -113,7 +113,7 @@ section {
 
 .section__subtitle {
     font-size: var(--fs-body);
-    font-weight: 500;
+    font-weight: normal;
 }
 
 a {
@@ -308,7 +308,7 @@ header {
 .ubc {
     position: relative;
     /* padding: 1px 3px; */
-    color: #ffa800;
+    /* color: #ffa800; */
 }
 
 /* .ubc::before {
@@ -358,7 +358,7 @@ header {
 .tech-stack {
     position: relative;
     /* padding: 1px 3px; */
-    color: red;
+    /* color: red; */
 }
 
 /* .tech-stack::before {
