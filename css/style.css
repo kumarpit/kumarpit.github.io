@@ -132,7 +132,7 @@ a {
 
 .github-link::before {
     content: '';
-    visibility: hidden;
+    /* visibility: hidden; */
     position: absolute;
     top: 0;
     left: 0;
@@ -145,20 +145,87 @@ a {
 }
 
 .github-link:hover::before {
-    visibility: visible;
+    /* visibility: visible; */
     cursor: pointer;
 }
 
 .site-link {
+    position: relative;
     color: #0495ff;
+    padding: 1px 3px;
+}
+
+.site-link::before {
+    content: '';
+    /* visibility: hidden; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #0495ff;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.site-link:hover::before {
+    /* visibility: visible; */
+    cursor: pointer;
 }
 
 .chrome-link {
+    position: relative;
     color: #dd5144;
+    padding: 1px 3px;
+}
+
+.chrome-link::before {
+    content: '';
+    /* visibility: hidden; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #dd5144;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.chrome-link:hover::before {
+    /* visibility: visible; */
+    cursor: pointer;
 }
 
 .contributions-link {
+    position: relative;
     color: #ffa800;
+    padding: 1px 3px;
+}
+
+.contributions-link::before {
+    content: '';
+    /* visibility: hidden; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ffa800;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.contributions-link:hover::before {
+    /* visibility: visible; */
+    cursor: pointer;
+}
+
+.project-link + .project-link {
+    margin-left: 5px;
 }
 
 
@@ -240,11 +307,11 @@ header {
 
 .ubc {
     position: relative;
-    padding: 1px 3px;
+    /* padding: 1px 3px; */
     color: #ffa800;
 }
 
-.ubc::before {
+/* .ubc::before {
     content: '';
     visibility: hidden;
     position: absolute;
@@ -261,7 +328,7 @@ header {
 .ubc:hover::before {
     cursor: pointer;
     visibility: visible;
-}
+} */
 
 .lp {
     position: relative;
@@ -271,7 +338,7 @@ header {
 
 .lp::before {
     content: '';
-    visibility: hidden;
+    /* visibility: hidden; */
     position: absolute;
     top: 0;
     left: 0;
@@ -290,11 +357,11 @@ header {
 
 .tech-stack {
     position: relative;
-    padding: 1px 3px;
+    /* padding: 1px 3px; */
     color: red;
 }
 
-.tech-stack::before {
+/* .tech-stack::before {
     content: '';
     visibility: hidden;
     position: absolute;
@@ -312,7 +379,7 @@ header {
 .tech-stack:hover::before {
     cursor: pointer;
     visibility: visible;
-}
+} */
 
 
 /* Landing -- Social List */
