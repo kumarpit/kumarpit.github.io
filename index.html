@@ -11,6 +11,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="css/style.css">
+        <script src="/script/script.js"></script>
     </head>
     <body>    
         <header>
@@ -24,7 +25,7 @@
                 </ul>
                 <!-- &#9728 - sun -->
                 <!-- &#127761 - moon -->
-                <button class="theme-toggle"><span class="emoji">&#9728</span></button>
+                <button class="theme-toggle" onclick="toggleTheme()"><span class="emoji dark" id="theme-indicator">&#9728</span></button>
             </nav>
         </header>
 
@@ -39,13 +40,14 @@
             <p class="section__subtitle section__subtitle--landing">Feel free to contact me at <a href="mailto:kumar.arpit77@yahoo.com" class="lp highlighted-text">kumar.arpit77@yahoo.com</a> to collaborate on projects or to have a chat about sports and sci-fi!</p>
             
             <!-- show footer link box on mobile -->
-            <ul class="social-list--footer">
+            <ul class="social-list--footer social-list-mobile">
                 <li class="social-item social-item--github"><i class="fab fa-github"></i></li>
                 <li class="social-item social-item--linkedin"><i class="fab fa-linkedin"></i></li>
                 <li class="social-item social-item--resume"><i class="fas fa-file"></i></li>
                 <li class="social-item social-item--email"><i class="fas fa-at"></i></li>
             </ul>
-            <!-- <ul class="social-list">
+
+            <ul class="social-list social-list-desktop">
                 <li class="social-list__item social-list__item--github">
                     <a href="https://github.com/kumarpit" class="social-list__link social-list__link--github">
                         <i class="fab fa-github"></i>
@@ -74,7 +76,7 @@
                         <span class="social-list__link--text">Email</span>
                     </a>
                 </li>
-            </ul> -->
+            </ul>
         </section>
 
 
