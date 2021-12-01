@@ -68,9 +68,15 @@
     --fs-h1: 2.1em;
     --fs-h2: 2em;
     --fs-h3: 1.25em;
-    --fs-body: 1.1em;
+    --fs-body: 1.05em;
 
     --br: .5em;
+}
+
+@media (min-width: 700px) {
+    :root {
+        --fs-body: 1.1em
+    }
 }
 
 /* General */
@@ -387,12 +393,12 @@ header {
     display: grid;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
-    width: 90%;
+    width: 85%;
     row-gap: 0.7em;
     column-gap: 1em;
     list-style: none;
     padding: 0;
-    margin: 2em auto 0 auto;
+    margin: 3em 0 0 0;
 }
 
 
@@ -416,7 +422,7 @@ header {
 
 .social-list__link {
     text-decoration: none;
-    font-size: var(--fs-body);
+    font-size: var(--fs-h3);
     padding: 0.5em 0;
     font-weight: bold;
 }
