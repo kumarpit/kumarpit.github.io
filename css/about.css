@@ -3,5 +3,5 @@
 }
 
 .section__subtitle--about {
-    font-size: 1em;
+    font-size: var(--fs-body);
 }

@@ -8,13 +8,17 @@
     font-weight: normal;
 }
 
+/* 1.3em on mobile, 1.15 on desktop */
+/* .section__subtitle--landing {
+    font-size: 1.17e !important;
+} */
+
 a {
     text-decoration: none;
 }
 
-/* a:hover {
-    text-decoration: underline;
-} */
+
+/* refactor below */
 
 .github-link {
     position: relative;
@@ -24,7 +28,6 @@ a {
 
 .github-link::before {
     content: '';
-    /* visibility: hidden; */
     position: absolute;
     top: 0;
     left: 0;
@@ -37,7 +40,6 @@ a {
 }
 
 .github-link:hover::before {
-    /* visibility: visible; */
     cursor: pointer;
 }
 
@@ -49,7 +51,6 @@ a {
 
 .site-link::before {
     content: '';
-    /* visibility: hidden; */
     position: absolute;
     top: 0;
     left: 0;
@@ -62,7 +63,6 @@ a {
 }
 
 .site-link:hover::before {
-    /* visibility: visible; */
     cursor: pointer;
 }
 
@@ -74,7 +74,6 @@ a {
 
 .chrome-link::before {
     content: '';
-    /* visibility: hidden; */
     position: absolute;
     top: 0;
     left: 0;
@@ -87,7 +86,6 @@ a {
 }
 
 .chrome-link:hover::before {
-    /* visibility: visible; */
     cursor: pointer;
 }
 
@@ -99,7 +97,6 @@ a {
 
 .contributions-link::before {
     content: '';
-    /* visibility: hidden; */
     position: absolute;
     top: 0;
     left: 0;
@@ -112,7 +109,6 @@ a {
 }
 
 .contributions-link:hover::before {
-    /* visibility: visible; */
     cursor: pointer;
 }
 

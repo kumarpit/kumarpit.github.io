@@ -37,10 +37,9 @@
 
 .project-description {
     display: none;
-    font-size: 0.9em;
 }
 
 .section__subtitle--project {
-    font-size: 0.9em;
+    font-size: var(--fs-body);
     margin: 0 0 1em 0;
 }

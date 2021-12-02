@@ -65,17 +65,25 @@
     --clr-dark: #1b1a1a;
     --clr-accent: lightskyblue;
 
-    --fs-h1: 2em;
+    /* --fs-h1: 2em;
     --fs-h2: 1.75em;
     --fs-h3: 1.25em;
-    --fs-body: 0.9em;
+    --fs-body: 0.9em; */
+
+    --fs-h1: 2em;
+    --fs-h2: 1.75em;
+    --fs-h3: 1.1em;
+    --fs-body: 1.03em;
 
     --br: .5em;
 }
 
 @media (min-width: 700px) {
     :root {
-        --fs-body: 1.05em
+        --fs-h1: 2.25em;
+        --fs-h2: 1.75em;
+        --fs-h3: 1.15em;
+        --fs-body: 1.05em;
     }
 }
 
@@ -113,12 +121,12 @@ body {
     margin: 0;
     font-family: var(--ff-primary);
     font-size: var(--fs-body);
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 p {
     font-size: var(--fs-body);
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 section {
