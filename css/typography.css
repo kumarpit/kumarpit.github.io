@@ -1,0 +1,121 @@
+.section__title {
+    font-weight: 800;
+    font-size: var(--fs-h1);
+}
+
+.section__subtitle {
+    font-size: var(--fs-body);
+    font-weight: normal;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* a:hover {
+    text-decoration: underline;
+} */
+
+.github-link {
+    position: relative;
+    padding: 1px 3px;
+    color: #1aba43;
+}
+
+.github-link::before {
+    content: '';
+    /* visibility: hidden; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #1aba43;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.github-link:hover::before {
+    /* visibility: visible; */
+    cursor: pointer;
+}
+
+.site-link {
+    position: relative;
+    color: #0495ff;
+    padding: 1px 3px;
+}
+
+.site-link::before {
+    content: '';
+    /* visibility: hidden; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #0495ff;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.site-link:hover::before {
+    /* visibility: visible; */
+    cursor: pointer;
+}
+
+.chrome-link {
+    position: relative;
+    color: #dd5144;
+    padding: 1px 3px;
+}
+
+.chrome-link::before {
+    content: '';
+    /* visibility: hidden; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #dd5144;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.chrome-link:hover::before {
+    /* visibility: visible; */
+    cursor: pointer;
+}
+
+.contributions-link {
+    position: relative;
+    color: #ffa800;
+    padding: 1px 3px;
+}
+
+.contributions-link::before {
+    content: '';
+    /* visibility: hidden; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ffa800;
+    opacity: 0.2;
+    border-radius: 0.5em;
+    padding: 5px;
+}
+
+.contributions-link:hover::before {
+    /* visibility: visible; */
+    cursor: pointer;
+}
+
+.project-link + .project-link {
+    margin-left: 5px;
+}

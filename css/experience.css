@@ -1,0 +1,40 @@
+.experience-box {
+    width: 100%;
+}
+
+.temp {
+    margin-bottom: 2em;
+}
+
+.experience__heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.experience__title h3 {
+    font-weight: 800;
+    font-size: var(--fs-body);
+    margin: 0;
+}
+
+.experience__link {
+    font-weight: bold;
+    /* color: #ffa800; */
+    /* color: #fdfd96; */
+}
+
+.section__subtitle--experience .section__subtitle--about{
+    font-size: 1em;
+}
+
+.tech-stack {
+    display: flex;
+    flex-direction: row;
+    margin-top: -1em;
+}
+
+.tech-stack p {
+    margin-right: 0.3em;
+}

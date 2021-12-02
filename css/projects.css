@@ -1,0 +1,46 @@
+.projects {
+    width:100%;
+}
+
+.project-container {
+    border-bottom: 1px solid var(--clr-light);
+}
+
+.dropdown-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.dropdown-box h2 {
+    font-size: var(--fs-h3);
+    max-width: 50%;
+}
+
+.links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.links a {
+    font-weight: bold;
+    padding: 0 0.2em;
+}
+
+.links button i {
+    color: var(--clr-light);
+    padding-left: 0.8em;
+}
+
+.project-description {
+    display: none;
+    font-size: 0.9em;
+}
+
+.section__subtitle--project {
+    font-size: 0.9em;
+    margin: 0 0 1em 0;
+}

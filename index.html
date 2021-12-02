@@ -11,7 +11,14 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="css/style.css">
-        <script src="script/script.js"></script>
+        <link rel="stylesheet" href="css/experience.css">
+        <link rel="stylesheet" href="css/footer.css">
+        <link rel="stylesheet" href="css/landing.css">
+        <link rel="stylesheet" href="css/navigation.css">
+        <link rel="stylesheet" href="css/projects.css">
+        <link rel="stylesheet" href="css/about.css">
+        <link rel="stylesheet" href="css/typography.css">
+        <script async defer src="script/script.js"></script>
     </head>
     <body>    
         <header>
@@ -101,7 +108,7 @@
                     <a href="#" class="experience__link contributions-link">contributions</a>
                 </div>
 
-                <p class="section__subtitle section__subtitle--experience">Full-stack developer on team working towards building a mobile application to make daily finances easier for UBC students. Completed the MVP during this school term. I worked on the backend to setup the <span class="highlighted-text">Pydantic data models</span>, their corresponding CRUD endpoints and the <span class="highlighted-text">OAuth2 user authentication flow</span>. On the frontend, I worked on creating reusable accordian and drop down components as well as animations using <span class="highlighted-text">Reanimated.</span></p>
+                <p class="section__subtitle section__subtitle--experience">Full-stack developer on team working towards building a mobile application to make daily finances easier for UBC students. Completed the MVP during this school term. I worked on the backend to setup the <span class="highlighted-text">Pydantic data models</span>, their corresponding CRUD endpoints and the <span class="highlighted-text">OAuth2 user authentication flow</span>. On the frontend, I worked on creating reusable accordion and drop down components as well as animations using <span class="highlighted-text">Reanimated.</span></p>
                 <div class="tech-stack">
                     <p class="highlighted-text lp">FastAPI</p>
                     <p class="highlighted-text lp">React Native</p>
@@ -130,92 +137,163 @@
         <section class="projects" id="projects">
             <h1 class="section__title section__title--projects">Projects</h1>
     
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>Hairy</h2>
-                <div class="links">
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
+            <!-- <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>Hairy</h2>
+                    <div class="links">
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
+                    <div class="tech-stack">
+                        <p class="highlighted-text lp">React Native</p>
+                        <p class="highlighted-text lp">PyTesseract</p>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>YouTube Library</h2>
+                    <div class="links">
+                        <a href="#" class="project-link site-link">site</a>
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
+                    <div class="tech-stack">
+                        <p class="highlighted-text lp">React</p>
+                        <p class="highlighted-text lp">YouTube Data API v3</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>YouTube Library</h2>
-                <div class="links">
-                    <a href="#" class="project-link site-link">site</a>
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
+            <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>DeskTime</h2>
+                    <!-- like rescueTime -->
+                    <div class="links">
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
+                    <div class="tech-stack">
+                        <p class="highlighted-text lp">Python</p>
+                        <p class="highlighted-text lp">D3.js</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>DeskTime</h2>
-                <!-- like rescueTime -->
-                <div class="links">
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
+            
+            <!-- minimal fitness logging application, custom sets reps blocks -->
+
+            <!-- <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>Grow</h2>
+                    <div class="links">
+                        <a href="#" class="project-link site-link">site</a>
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
+                    <div class="tech-stack">
+                        <p class="highlighted-text lp">React</p>
+                        <p class="highlighted-text lp">MongoDB</p>
+                        <p class="highlighted-text lp">Express</p>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- github for notes, pastebin of notes + kanban board -->
+            <!-- <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>Notebook</h2> 
+                    <div class="links">
+                        <a href="#" class="project-link site-link">site</a>
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
+                </div>
+            </div> -->
+
+            <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>Arcade</h2>
+                    <div class="links">
+                        <a href="#" class="project-link site-link">site</a>
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
                 </div>
             </div>
 
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>Grow</h2>
-                <!-- minimal fitness logging application, custom sets reps blocks -->
-                <div class="links">
-                    <a href="#" class="project-link site-link">site</a>
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
+            <!-- + themes for Canvas (UBC) -->
+
+            <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>UBC Courses</h2>
+                    <div class="links">
+                        <a href="#" class="project-link chrome-link">chrome</a>
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
                 </div>
             </div>
 
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>Notebook</h2> 
-                <!-- github for notes, pastebin of notes -->
-                <div class="links">
-                    <a href="#" class="project-link site-link">site</a>
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
+            <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>Scanned</h2> 
+                    <div class="links">
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
                 </div>
             </div>
 
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>Arcade</h2>
-                <div class="links">
-                    <a href="#" class="project-link site-link">site</a>
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
+            <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>5/3/1 Workout Generator</h2> 
+                    <div class="links">
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
                 </div>
             </div>
 
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>Themes for Canvas (UBC)</h2>
-                <div class="links">
-                    <a href="#" class="project-link chrome-link">chrome</a>
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
+            <div class="project-container">
+                <div class="dropdown-box dropdown-box--projects"> 
+                    <h2>This Website</h2>
+                    <div class="links">
+                        <a href="#" class="project-link site-link">site</a>
+                        <a href="#" class="project-link github-link">github</a>
+                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>Scanned</h2> 
-                <div class="links">
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-            </div>
-
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>5/3/1 Workout Generator</h2> 
-                <div class="links">
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-            </div>
-
-            <div class="dropdown-box dropdown-box--projects"> 
-                <h2>This Website</h2>
-                <div class="links">
-                    <a href="#" class="project-link site-link">site</a>
-                    <a href="#" class="project-link github-link">github</a>
-                    <i class="fas fa-chevron-down"></i>
+                <div class="project-description">
+                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
                 </div>
             </div>
         </section>
