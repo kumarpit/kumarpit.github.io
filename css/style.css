@@ -70,20 +70,20 @@
     --fs-h3: 1.25em;
     --fs-body: 0.9em; */
 
-    --fs-h1: 2em;
-    --fs-h2: 1.75em;
-    --fs-h3: 1.1em;
-    --fs-body: 1.03em;
+    --fs-h1: 2rem;
+    --fs-h2: 1.75rem;
+    --fs-h3: 1.25rem;
+    --fs-body: 1.1rem;
 
     --br: .5em;
 }
 
 @media (min-width: 700px) {
     :root {
-        --fs-h1: 2.25em;
-        --fs-h2: 1.75em;
-        --fs-h3: 1.15em;
-        --fs-body: 1.05em;
+        --fs-h1: 2.25rem;
+        --fs-h2: 1.85rem;
+        --fs-h3: 1.35rem;
+        --fs-body: 1.1rem;
     }
 }
 
@@ -151,6 +151,6 @@ button:hover {
 
 @media (min-width: 1100px) {
     section {
-        padding: 2em 23%;
+        padding: 2em 25%;
     }
 }

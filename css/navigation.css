@@ -1,14 +1,14 @@
 header {
     display: flex;
     justify-content: center;
-    margin-top: 2em;
+    margin-top: 0.5em;
 }
 
 .nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 86%;
+    width: 100%;
 }
 
 .nav__list {
@@ -41,9 +41,9 @@ header {
 }
 
 @media (min-width: 1100px) {
-    .nav {
-        width: 54%;
-    }
+    /* .nav {
+        width: 50%;
+    } */
 
     .nav__item {
         font-size: var(--fs-body);
