@@ -3,7 +3,28 @@
 }
 
 .temp {
-    margin-bottom: 2em;
+    margin-bottom: 3em;
+}
+
+.experience__title--img {
+    display: flex;
+    flex-direction: row;
+}
+
+.experience-img {
+    display: none;
+    margin-left: -15px;
+}
+
+@media (min-width: 700px) {
+    .experience-img {
+        display: block;
+    }
+}
+
+.gdgws {
+    margin-left: 0;
+    margin-right: 10px;
 }
 
 .experience__heading {

@@ -37,7 +37,7 @@ header {
 }
 
 .theme-toggle span {
-    font-size: var(--fs-h3);
+    font-size: 1.35em;
 }
 
 @media (min-width: 1100px) {
