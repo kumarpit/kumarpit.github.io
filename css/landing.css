@@ -45,6 +45,10 @@
     margin-bottom: 6em;
 }
 
+.social-list-desktop {
+    margin-bottom: 1.5em !important;
+}
+
 .social-list-mobile li a i{
     font-size: 1.5em;
 }
