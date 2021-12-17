@@ -40,7 +40,7 @@ h1, .highlighted-text {
 }
 
 .section-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-bottom: 1em;
 }
 
@@ -66,4 +66,8 @@ footer {
 
 .color {
     color: var(--fc-darker);
+}
+
+.section-subtitle {
+    color: var(--fc-darkest);
 }
