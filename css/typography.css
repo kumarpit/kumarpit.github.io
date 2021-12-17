@@ -1,117 +1,69 @@
-.section__title {
-    font-weight: 800;
-    font-size: var(--fs-h1);
+body {
+    font-family: var(--ff-primary);
+    color: var(--fc-dark-title);
 }
 
-.section__subtitle {
-    font-size: var(--fs-body);
-    font-weight: normal;
+p {
+    font-family: var(--ff-secondary);
+    color: var(--fc-darker);
 }
 
-/* 1.3em on mobile, 1.15 on desktop */
-/* .section__subtitle--landing {
-    font-size: 1.17e !important;
-} */
-
-a {
-    text-decoration: none;
+h3 {
+    font-family: var(--ff-primary);
 }
 
-
-/* refactor below */
-
-.github-link {
-    position: relative;
-    padding: 1px 3px;
-    color: #1aba43;
+.section-title {
+    font-family: var(--ff-primary);
+    color: var(--fc-darkest);
 }
 
-.github-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: #1aba43;
-    opacity: 0.2;
-    border-radius: 0.5em;
-    padding: 5px;
+.highlighted-text, a {
+    font-family: var(--ff-primary);
+    font-weight: 500;
 }
 
-.github-link:hover::before {
-    cursor: pointer;
+.highlighted-italics {
+    font-style: italic;
 }
 
-.site-link {
-    position: relative;
-    color: #0495ff;
-    padding: 1px 3px;
+ul {
+    list-style: none;
 }
 
-.site-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: #0495ff;
-    opacity: 0.2;
-    border-radius: 0.5em;
-    padding: 5px;
+h1, .highlighted-text {
+    color: var(--fc-darkest);
 }
 
-.site-link:hover::before {
-    cursor: pointer;
+.section-title--landing {
+    /* font-size: 2.8em !important; */
+    margin: 0 !important;
 }
 
-.chrome-link {
-    position: relative;
-    color: #dd5144;
-    padding: 1px 3px;
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1em;
 }
 
-.chrome-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: #dd5144;
-    opacity: 0.2;
-    border-radius: 0.5em;
-    padding: 5px;
+.tech-stack {
+    color: var(--fc-darker);
+    margin-bottom: 10px;
 }
 
-.chrome-link:hover::before {
-    cursor: pointer;
+.byline {
+    font-size: 12px;
 }
 
-.contributions-link {
-    position: relative;
-    color: #ffa800;
-    padding: 1px 3px;
+footer {
+    text-align: center;
+    margin: 4em 0 2em 0;
 }
 
-.contributions-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: #ffa800;
-    opacity: 0.2;
-    border-radius: 0.5em;
-    padding: 5px;
+.project-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.contributions-link:hover::before {
-    cursor: pointer;
-}
-
-.project-link + .project-link {
-    margin-left: 5px;
+.color {
+    color: var(--fc-darker);
 }
