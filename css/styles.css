@@ -22,7 +22,7 @@ body {
     --ff-primary: "DM Sans", sans-serif;
     --ff-secondary: "Source Sans Pro", serif;
 
-    --clr-light: #f1f1f1;
+    --clr-light: #fff;
     --clr-dark: #1a1d23;
     --fc-dark: rgba(0, 0, 0, 0.5);
     --fc-darker: rgba(0, 0, 0, 0.8);
