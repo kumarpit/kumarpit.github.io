@@ -12,8 +12,9 @@ html {
 
 body {
     background-color: var(--clr-light);
-    width: clamp(300px, 85%, 610px);
+    width: clamp(300px, 85%, 640px);
     margin: 0 auto;
+    font-size: 1.05rem;
     line-height: 1.5;
 }
 
@@ -21,11 +22,11 @@ body {
     --ff-primary: "DM Sans", sans-serif;
     --ff-secondary: "Source Sans Pro", serif;
 
-    --clr-dark: #f1f1f1;
-    --clr-light: #1a1d23;
-    --fc-dark: rgba(255, 255, 255, 0.5);
-    --fc-darker: rgba(255, 255, 255, 0.8);
-    --fc-darkest: rgba(255, 255, 255, 0.9);
+    --clr-light: #f1f1f1;
+    --clr-dark: #1a1d23;
+    --fc-dark: rgba(0, 0, 0, 0.5);
+    --fc-darker: rgba(0, 0, 0, 0.8);
+    --fc-darkest: #000;
 }
 
 section {
@@ -81,4 +82,12 @@ code {
         color: var(--fc-dark);
         font-style: italic;
     }
+}
+
+.english, .hindi {
+    line-height: 1 !important;
+}
+
+.english {
+    margin-bottom: 20px !important;
 }

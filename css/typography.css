@@ -35,7 +35,7 @@ h1, .highlighted-text {
 }
 
 .section-title--landing {
-    /* font-size: 2.8em !important; */
+    font-size: 2rem !important;
     margin: 0 !important;
 }
 
