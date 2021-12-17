@@ -73,3 +73,7 @@ footer {
 .section-subtitle {
     color: var(--fc-darkest);
 }
+
+.project-img {
+    max-width: 100%;
+}
