@@ -3,318 +3,173 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Arpit Kumar</title>
+        <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/experience.css">
-        <link rel="stylesheet" href="css/footer.css">
-        <link rel="stylesheet" href="css/landing.css">
-        <link rel="stylesheet" href="css/navigation.css">
-        <link rel="stylesheet" href="css/projects.css">
-        <link rel="stylesheet" href="css/about.css">
-        <link rel="stylesheet" href="css/typography.css">
-        <script async defer src="script/script.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="/css/typography.css">
+        <link rel="stylesheet" href="/css/landing.css">
+        <link rel="stylesheet" href="/prism/prism.css">
     </head>
-    <body>    
-        <!-- Landing -->
+    <body>
+        <header>
+            <nav>
+                <ul class="navigation">
+                    <li class="nav-item about"><a href="#">about</a></li>
+                    <li class="nav-item"><a href="#">experience</a></li>
+                    <li class="nav-item"><a href="#">projects</a></li>
+                    <li class="nav-item"><a href="#">blog</a></li>
+                </ul>
+                <div>
+                    <i id="theme-indicator" class="fas fa-moon"></i>
+                </div>
+            </nav>
+        </header>
+        
         <section class="landing">
-            <header>
-                <nav class="nav">
-                    <ul class="nav__list">
-                        <li class="nav__item"><a href="#about" class="nav__link">about</a></li>
-                        <li class="nav__item"><a href="#experience" class="nav__link">experience</a></li>
-                        <li class="nav__item"><a href="#projects" class="nav__link">projects</a></li>
-                        <!-- <li class="nav__item"><a href="#" class="nav__link">blog</a></li> -->
-                        <!-- <li class="nav__item nav__item--resume"><a href="#" class="nav__link">resume</a></li> -->
-                    </ul>
-                    <!-- &#9728 - sun -->
-                    <!-- &#127761 - moon -->
-                    <button class="theme-toggle" onclick="toggleTheme()"><span class="emoji dark" id="theme-indicator">&#9728</span></button>
-                </nav>
-            </header>
+
+            <div class="name">
+                <div class="words">
+                    <div>
+                        <span><h1 class="section-title section-title--landing">ARPIT</h1></span>
+                        <span><h1 class="section-title section-title--landing">KUMAR</h1></span>
+                    </div>
+                    <div>
+                        <span><h1 class="section-title section-title--landing">अर्पित</h1></span>
+                        <span><h1 class="section-title section-title--landing">कुमार</h1></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="landing-text">
+                <p>Hey, I'm a second-year student at the <span class="highlighted-text">University of British Columbia</span> studying <span class="highlighted-text">Computer Science</span>. I am currently a developer at <a href="#">UBC Launch Pad</a> where I am working in a team to develop a finance management application. I am seeking <span class="highlighted-text">summer 2022 internships</span>.</p>
+                
+                <p>Feel free to contact me at <a href="#">kumar.arpit77@yahoo.com</a> to collaborate on projects or to just have a chat.</p>
+            </div>
+
             <div>
-                <h1 class="section__title section__title--landing">Hey! I'm Arpit <span class="emoji wave">&#128075</span></h1>
-                
-                <p class="section__subtitle section__subtitle--landing">I am studying Computer Science at the <span class="highlighted-text ubc"> University of British Columbia </span> and am looking for <span class="highlighted-text">summer 2022 internships</span>. </p> 
-                
-                <p class="section__subtitle section__subtitle--landing">Currently, I am a software developer at <a href="https://ubclaunchpad.com/" class="highlighted-text lp">UBC Launch Pad</a> where I am working on creating a daily finance management app using the <span class="highlighted-text">FARM</span> stack.</p>
-                
-                <p class="section__subtitle section__subtitle--landing">Feel free to contact me at <a href="mailto:kumar.arpit77@yahoo.com" class="lp highlighted-text">kumar.arpit77@yahoo.com</a> to collaborate on projects or to have a chat about sports and sci-fi!</p>
-                
-                <ul class="social-list--footer social-list-mobile">
-                    <li class="social-item social-item--github"><a href="https://github.com/kumarpit"><i class="fab fa-github"></i></a></li>
-                    <li class="social-item social-item--linkedin"><a href="https://www.linkedin.com/in/krarpit/"><i class="fab fa-linkedin"></i></a></li>
-                    <li class="social-item social-item--resume"><a href="https://kumarpit.github.io/arpitkumar/files/my_resume.pdf"><i class="fas fa-file"></i></a></li>
-                    <li class="social-item social-item--email"><a href="mailto:kumar.arpit77@yahoo.com"><i class="fas fa-at"></i></a></li>
-                </ul>
-
-                <ul class="social-list social-list-desktop">
-                    <li class="social-list__item social-list__item--github">
-                        <a href="https://github.com/kumarpit" class="social-list__link social-list__link--github">
-                            <i class="fab fa-github"></i>
-                            <!-- Github -->
-                            <span class="social-list__link--text">Github</span>
-                        </a>
-                    </li>
-                    <li class="social-list__item social-list__item--linkedin">
-                        <a href="https://www.linkedin.com/in/krarpit/" class="social-list__link social-list__link--linkedin">
-                            <i class="fab fa-linkedin"></i>
-                            <!-- Linkedin -->
-                            <span class="social-list__link--text">Linkedin</span>
-                        </a>
-                    </li>
-                    <li class="social-list__item social-list__item--resume">
-                        <a href="/files/my_resume.pdf" class="social-list__link social-list__link--resume">
-                            <i class="fas fa-file"></i> 
-                            <!-- Resume -->
-                            <span class="social-list__link--text">Resume</span> 
-                        </a>
-                    </li>
-                    <li class="social-list__item social-list__item--email">
-                        <a href="mailto:kumar.arpit77@yahoo.com" class="social-list__link social-list__link--email">
-                            <i class="fas fa-at"></i> 
-                            <!-- Email -->
-                            <span class="social-list__link--text">Email</span>
-                        </a>
-                    </li>
+                <ul class="social-list">
+                    <li class="social-item"><a href="#">github</a></li>
+                    <li class="social-item"><a href="#">linkedin</a></li>
+                    <li class="social-item"><a href="#">resume</a></li>
                 </ul>
             </div>
         </section>
 
-
-        <!-- About -->
-        <section class="about" id="about">
-            <h1 class="section__title sectoin__title--about">About</h1>
-            <p class="section__subtitle section__subtitle--about">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, voluptatem pariatur molestias unde commodi minus quis cumque nisi, quibusdam eum ad nesciunt autem aperiam. Similique quam inventore laudantium facilis laborum. Voluptate laborum hic corporis ullam facilis distinctio veniam facere sunt non numquam ipsam aut voluptatum, maiores, eos perferendis et ad cumque! Architecto rerum illo quisquam explicabo nulla neque molestias. Libero quaerat asperiores similique iure rerum aperiam cum ducimus praesentium minus deleniti cumque quis hic perferendis tempora dolorem quia quas nulla autem nihil unde labore, delectus sint. Nam earum fugiat, repellat qui accusamus error blanditiis, autem quibusdam neque, doloremque laborum hic.</p>
-
-            <!-- skills section within about -->
-        </section>
-
-        <!-- Experience -->
-        <section class="experience" id="experience">
-            <h1 class="section__title section__title--experience">Experience</h1>
-
-            <div class="experience-box temp">
-                <div class="experience__heading">
-                    <div class="experience__title--img">
-                        <img src="imgs/rocket.007ebd24.png" height="60" class="experience-img">
-                        <div class="experience__title">
-                            <h3>UBC Launch Pad</h3>
-                            <h3>Software Developer</h3>
-                        </div>
-                    </div>
-                    <a href="#" class="experience__link contributions-link">contributions</a>
-                </div>
-
-                <p class="section__subtitle section__subtitle--experience">Full-stack developer on team working towards building a mobile application to make daily finances easier for UBC students. Completed the MVP during this school term. I worked on the backend to setup the <span class="highlighted-text">Pydantic data models</span>, their corresponding CRUD endpoints and the <span class="highlighted-text">OAuth2 user authentication flow</span>. On the frontend, I worked on creating reusable accordion and drop down components as well as animations using <span class="highlighted-text">Reanimated.</span></p>
-                <div class="tech-stack">
-                    <p class="highlighted-text lp">FastAPI</p>
-                    <p class="highlighted-text lp">React Native</p>
-                    <p class="highlighted-text lp">MongoDB</p>
-                </div>
-            </div>
-
-            <div class="experience-box">
-                <div class="experience__heading">
-                    <div class="experience__title--img">
-                        <img src="imgs/1613285792293.jpg" height="60" class="experience-img gdgws">
-                        <div class="experience__title">
-                            <h3>GDGWS</h3>
-                            <h3>Freelance Developer</h3>
-                        </div>
-                    </div>
-                    <a href="#" class="experience__link github-link">github</a>
-                </div>
-
-                <p class="section__subtitle section__subtitle--experience">Built a Java application for school squash coach to manage and lookup data of <span class="highlighted-text">250 students</span>. Helped <span class="highlighted-text">save 10 - 15 minutes</span> out of the 1 hour sports periods as the coach no longer had to use logbooks. Designed a <span class="highlighted-text">MySQL database</span>, implemented an easy-to-use GUI using <span class="highlighted-text">Java Swing</span> and utilized the <span class="highlighted-text">Java XSSF API</span> to store match scoresheets in structured directories as spreadsheet files.</p>
-                <div class="tech-stack">
-                    <p class="highlighted-text lp">Java</p>
-                    <p class="highlighted-text lp">MySQL</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects -->
-        <section class="projects" id="projects">
-            <h1 class="section__title section__title--projects">Projects</h1>
-    
-            <!-- <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>Hairy</h2>
-                    <div class="links">
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
-                    <div class="tech-stack">
-                        <p class="highlighted-text lp">React Native</p>
-                        <p class="highlighted-text lp">PyTesseract</p>
-                    </div>
-                </div>
-            </div> -->
-
-            <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>YouTube Library</h2>
-                    <div class="links">
-                        <a href="#" class="project-link site-link">site</a>
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
-                    <div class="tech-stack">
-                        <p class="highlighted-text lp">React</p>
-                        <p class="highlighted-text lp">YouTube Data API v3</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>DeskTime</h2>
-                    <!-- like rescueTime -->
-                    <div class="links">
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
-                    <div class="tech-stack">
-                        <p class="highlighted-text lp">Python</p>
-                        <p class="highlighted-text lp">D3.js</p>
-                    </div>
-                </div>
-            </div>
+        <section class="about">
+            <h1 class="section-title section-title--about">ABOUT</h1>
 
             
-            <!-- minimal fitness logging application, custom sets reps blocks -->
+            <!-- prism is weird -->
+        <pre class="line-numbers"><code class="language-javascript">{ 
+    "currently": "@ubclaunchpad, @wavy",
+    "school": "University of British Columbia", 
+    "major": "Computer Science", 
+    "gpa": 91, 
+    "objective": "Build useful products.", 
+    "location": "Vancouver, Canada" 
+}</code></pre>
 
-            <!-- <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>Grow</h2>
-                    <div class="links">
-                        <a href="#" class="project-link site-link">site</a>
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
-                    <div class="tech-stack">
-                        <p class="highlighted-text lp">React</p>
-                        <p class="highlighted-text lp">MongoDB</p>
-                        <p class="highlighted-text lp">Express</p>
-                    </div>
-                </div>
-            </div> -->
 
-            <!-- github for notes, pastebin of notes + kanban board -->
-            <!-- <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>Notebook</h2> 
-                    <div class="links">
-                        <a href="#" class="project-link site-link">site</a>
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
-                </div>
-            </div> -->
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est labore tenetur sint blanditiis enim sequi ex nam nobis dolorum excepturi perferendis veritatis, laborum iure aspernatur harum repellat dolorem. Ipsa, assumenda consequuntur, temporibus est non nulla mollitia tempore deserunt labore esse cumque ipsam optio consequatur dolores quos veniam! Modi et consectetur ipsum vitae temporibus, facere fuga repudiandae. Cum odit illum facilis sit distinctio atque accusamus exercitationem voluptate perferendis, eaque maxime at saepe, porro vero alias ea voluptatem voluptates eligendi earum laborum perspiciatis aliquid quasi maiores. Eligendi itaque numquam fugiat pariatur? Ipsum officia quae repellendus dolorum quia earum nisi dolor, similique sunt delectus, ab aliquid porro. Quibusdam sunt possimus eligendi tempora quas eaque sapiente nisi hic in. Suscipit repellendus vero fuga nam quis voluptatum iste ipsam facere quod facilis est nulla omnis ullam, rerum repudiandae, quam dicta sit voluptas tempora iusto enim. Hic eos cum tempora! Magni omnis at nesciunt numquam cumque voluptas corrupti fuga eum nobis hic placeat natus sed aperiam, dignissimos veniam quibusdam sapiente facere tempora eligendi? Consectetur quisquam voluptas iusto asperiores, ratione accusantium assumenda.</p>
+        </section>
 
-            <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>Arcade</h2>
-                    <div class="links">
-                        <a href="#" class="project-link site-link">site</a>
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
+        <section class="experience">
+            <h1 class="section-title section-title--experience">EXPERIENCE</h1>
+            <div class="experiences">
+                <div class="experience-link">
+                    <h3>Jan'22</h3> 
                 </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
+                
+                <div>
+                    <p><span class="highlighted-text">Frontend Developer</span> at <a href="#">Wavy</a></p>
                 </div>
-            </div>
 
-            <!-- + themes for Canvas (UBC) -->
+                <div class="experience-link">
+                    <h3>Sept'21 - Present</h3> 
+                    <a href="#">github</a>
+                </div>
+                <div>
+                    <p><span class="highlighted-text">Full-stack Developer</span> at <a href="#">UBC Launch Pad</a></p>
+                    <p class="tech-stack">React Native, FastAPI, MongoDB</p>
+                    
+                    <p>Developing a mobile application to make daily finances easier for UBC students. Followed agile developmentpractises and completed the MVP during this school term. Created OAuth 2.0 user authentication flow and setup Pydantic data models and CRUD endpoints for the API. Designed reusable accordion, dropdown and modal components as well as animations using Reanimated</p>
 
-            <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>UBC Courses</h2>
-                    <div class="links">
-                        <a href="#" class="project-link chrome-link">chrome</a>
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
                 </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
-                </div>
-            </div>
 
-            <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>Scanned</h2> 
-                    <div class="links">
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
+                <div class="experience-link">
+                    <h3>Nov'19 - Feb'20</h3> 
+                    <a href="#">github</a>
                 </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
-                </div>
-            </div>
-
-            <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>5/3/1 Workout Generator</h2> 
-                    <div class="links">
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
-                </div>
-            </div>
-
-            <div class="project-container">
-                <div class="dropdown-box dropdown-box--projects"> 
-                    <h2>This Website</h2>
-                    <div class="links">
-                        <a href="#" class="project-link site-link">site</a>
-                        <a href="#" class="project-link github-link">github</a>
-                        <button class="see-project"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                </div>
-                <div class="project-description">
-                    <p class="section__subtitle section__subtitle--project">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quibusdam pariatur, distinctio laborum, doloribus quae debitis minima doloremque a ratione non excepturi explicabo tempora suscipit, dolores totam facilis architecto sed aspernatur repellat. Rerum ipsum quisquam, repudiandae quos inventore ad mollitia molestiae vel! Quos accusamus culpa a aut alias voluptas harum.</p>
+                <div>
+                    <p><span class="highlighted-text">Freelance Developer</span></p>
+                    <p class="tech-stack">Java, MySQL</p>
+                    
+                    <p>Built desktop application for school squash coach to manage and lookup data of 250 students - saved 10-15 minutes out of the 1 hour sports periods as the coach no longer had to use logbooks. Developed an inbuilt scorekeeper to track match scoresheets, which were stored as spreadsheet files in structured directories using the Java XSSF API. Implemented graphical analysis of player data to provide insights on player progress and featured conditional rendering to improve user experience.</p>
                 </div>
             </div>
         </section>
 
-        <!-- <div class="spacer"></div> -->
+        <section class="projects">
+            <h1>PROJECTS</h1>
+            <div class="project">
+                <div class="project-title">
+                    <h2 class="section-title section-title--project">WatchNow</h2>
+                    <div>
+                        <a href="#">site</a>
+                        <a href="#">github</a>
+                    </div>
+                </div>
+                <p class="tech-stack">React, Express, NodeJS, YouTube Data API v3</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint fuga quisquam corrupti atque sapiente voluptates, error fugit temporibus totam culpa. Dolorem ea repellat minima laboriosam maxime beatae quis incidunt, ipsum rem, quasi corrupti quam maiores et alias? Numquam odio pariatur ea non repellat, aspernatur beatae veniam impedit modi. Delectus, quo?</p>
+            </div>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <ul class="social-list--footer">
-                <li class="social-item social-item--github"><a href="#"><i class="fab fa-github"></i></a></li>
-                <li class="social-item social-item--linkedin"><a href="#"><i class="fab fa-linkedin"></i></a></li>
-                <li class="social-item social-item--resume"><a href="#"><i class="fas fa-file"></i></a></li>
-                <li class="social-item social-item--email"><a href="#"><i class="fas fa-at"></i></a></li>
-            </ul>
-            <p class="footer__text">made by Arpit Kumar, © 2021</p>
+            <div class="project">
+                <div class="project-title">
+                    <h2 class="section-title section-title--project">Arcade</h2>
+                    <a href="#">github</a>
+                </div>
+                <p class="tech-stack">Javascript, WebSockets</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia accusamus harum autem vitae porro? Nobis, praesentium rerum. Id, necessitatibus libero eveniet facere quibusdam voluptates est eaque obcaecati ipsa quo eius repellat. Illum dolore repudiandae odio minus omnis earum autem ipsam. Dolorum recusandae qui natus doloribus praesentium sequi soluta? Itaque, quis!</p>
+            </div>
+
+            <div class="project">
+                <div class="project-title">
+                    <h2 class="section-title section-title--project">UBC Courses</h2>
+                    <a href="#">github</a>
+                </div>
+                <p class="tech-stack">Python, Selenium, BeautifulSoup</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia accusamus harum autem vitae porro? Nobis, praesentium rerum. Id, necessitatibus libero eveniet facere quibusdam voluptates est eaque obcaecati ipsa quo eius repellat. Illum dolore repudiandae odio minus omnis earum autem ipsam. Dolorum recusandae qui natus doloribus praesentium sequi soluta? Itaque, quis!</p>
+            </div>
+
+            <div class="project">
+                <div class="project-title">
+                    <h2 class="section-title section-title--project">Workout Programmer</h2>
+                    <a href="#">github</a>
+                </div>
+                <p class="tech-stack">Java, JSON, Design Patterns</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia accusamus harum autem vitae porro? Nobis, praesentium rerum. Id, necessitatibus libero eveniet facere quibusdam voluptates est eaque obcaecati ipsa quo eius repellat. Illum dolore repudiandae odio minus omnis earum autem ipsam. Dolorum recusandae qui natus doloribus praesentium sequi soluta? Itaque, quis!</p>
+            </div>
+        </section>
+        
+        <footer>
+            <div>
+                <a href="#">github</a> <span class="color">/</span>
+                <a href="#">linkedin</a> <span class="color">/</span> 
+                <a href="#">email</a>
+            </div>
+            <p class="byline">made by arpit kumar</p>
         </footer>
+        <script src="/prism/prism.js"></script>
+        <script src="/script/toggleTheme.js"></script>
     </body>
 </html>
