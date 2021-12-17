@@ -5,7 +5,7 @@ header {
 .name {
     line-height: 1.3;
     margin: 0 0 1em 0;
-    height: 115px;
+    height: 94px;
 }
 
 .landing {
@@ -99,13 +99,13 @@ a {
 
 @keyframes spin_words {
     10% {
-        transform: translateY(-240%)
+        transform: translateY(-237%)
     }
     50% {
-        transform: translateY(-240%)
+        transform: translateY(-237%)
     }
     65% {
-        transform: translateY(-240%)
+        transform: translateY(-237%)
     }
     75% {
         transform: translateY(0);
