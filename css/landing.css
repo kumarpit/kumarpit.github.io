@@ -62,6 +62,13 @@ nav {
     row-gap: 25px;
 }
 
+@media screen and (max-width: 490px) {
+    .experiences {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 .experience h3 {
     font-weight: 300;
     font-style: italic;
