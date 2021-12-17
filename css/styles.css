@@ -91,3 +91,9 @@ code {
 .english {
     margin-bottom: 20px !important;
 }
+
+.project-links {
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+}
