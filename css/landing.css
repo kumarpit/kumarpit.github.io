@@ -78,7 +78,7 @@ a {
 
 .words div span {
     display: block;
-    animation: spin_words 11s 10s infinite;
+    animation: spin_words 20s 5s infinite;
 }
 
 .words div {
@@ -91,7 +91,13 @@ a {
 }
 
 @keyframes spin_words {
+    25% {
+        transform: translateY(-212%)
+    }
     50% {
         transform: translateY(-212%)
+    }
+    75% {
+        transform: translateY(0);
     }
 }
