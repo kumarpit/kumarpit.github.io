@@ -99,13 +99,13 @@ a {
 
 @keyframes spin_words {
     10% {
-        transform: translateY(-256%)
+        transform: translateY(-253%)
     }
     50% {
-        transform: translateY(-256%)
+        transform: translateY(-253%)
     }
     65% {
-        transform: translateY(-256%)
+        transform: translateY(-253%)
     }
     75% {
         transform: translateY(0);
