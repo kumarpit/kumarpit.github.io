@@ -86,7 +86,7 @@ a {
 .projects {
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 30px;
 }
 
 .words div span {
