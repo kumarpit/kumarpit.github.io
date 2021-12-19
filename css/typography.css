@@ -82,3 +82,7 @@ footer {
 .project-img {
     max-width: 100%;
 }
+
+.section-title--about {
+    margin-bottom: 15px;
+}

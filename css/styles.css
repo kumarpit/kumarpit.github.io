@@ -12,7 +12,7 @@ html {
 
 body {
     background-color: var(--clr-light);
-    width: clamp(300px, 90%, 700px);
+    width: clamp(300px, 90%, 850px);
     margin: 0 auto;
     font-size: 1.15rem;
     line-height: 1.5;
