@@ -14,7 +14,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,500&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="./css/styles.css">
         <link rel="stylesheet" href="./css/landing.css">
@@ -72,10 +71,10 @@
             
             <!-- prism is weird -->
         <pre class="line-numbers"><code class="language-javascript">{ 
-    "currently": "@ubc_launchpad, @ubc_visual_cognition_lab",
+    "currently": "@ubclaunchpad, @ubc-vcl",
     "school": "University of British Columbia", 
     "major": "Computer Science", 
-    "objective": "Build useful products.", 
+    "objective": "Design elegant solutions to problems", 
     "location": "Vancouver, Canada" 
 }</code></pre>
 
@@ -131,15 +130,25 @@
             <div class="projects">
                 <div class="project">
                     <div class="project-title">
-                        <h2 class="section-subtitle section-title--project">WatchNow</h2>
+                        <h2 class="section-subtitle section-title--project">Brainstorm</h2>
+                        <div class="project-links">
+                            <a href="https://github.com/kumarpit/brainstorm">github</a>
+                        </div>
+                    </div>
+                    <p class="tech-stack">Express, MongoDB, ShareDB, QuillJS</p>
+                    <p>Currently working on creating a collaborative pinboard allowing teams to share ideas, notes and code snippets when brainstorming for a project.</p>
+                </div>
+
+                <div class="project">
+                    <div class="project-title">
+                        <h2 class="section-subtitle section-title--project">YouTube Library</h2>
                         <div class="project-links">
                             <a href="https://watchnow-home.herokuapp.com/">site</a>
                             <a href="https://github.com/kumarpit/watchnow">github</a>
                         </div>
                     </div>
-                    <p class="tech-stack">React, Express, NodeJS, YouTube Data API v3</p>
-                    <!-- <img src="./files/watchnow.png" alt="project-img" class="project-img"> -->
-                    <p>Redesigned the YouTube library to make organizing and managing personal playlists easier. Implemented features missing on YouTube, such as searching through multiple playlists at once, playlist recommendations and basic functionality like allowing multi-deleting playlist items. Integrated Google OAuth 2.0 to make authenticated API calls and deployed on Heroku.</p>
+                    <p class="tech-stack">React, Express, NodeJS, YouTube API</p>
+                    <p>Redesigned the YouTube library to make organizing playlists easier. Implemented features unavailable on YouTube, such as searching through multiple playlists, playlist recommendations and multi-deleting playlist items. Integrated Google OAuth 2.0 to make authenticated API calls and deployed on Heroku.</p>
                 </div>
 
                 <div class="project arcade">
@@ -148,8 +157,7 @@
                         <a href="https://github.com/kumarpit/arcade">github</a>
                     </div>
                     <p class="tech-stack">Javascript, WebSockets</p>
-                    <!-- <img src="./files/asteroids.png" alt="project-img" class="project-img"> -->
-                    <p>Implemented a collection of classic arcade games (Tetris, Asteroids, Battleships, Snake) using Vanilla Javascript. Tweaked game logic and set up Socket.io server to allow multiplayer functionality and implemented features like live chat and highest score tracking between two players.</p>
+                    <p>Implemented a collection of classic arcade games (Tetris, Asteroids, Battleships, Snake) using Javascript. Designed additional game logic and set up Socket.io server to allow multiplayer support.</p>
                 </div>
 
                 <div class="project">
@@ -163,11 +171,11 @@
 
                 <div class="project">
                     <div class="project-title">
-                        <h2 class="section-subtitle section-title--project">Workout Programmer</h2>
-                        <a href="https://github.students.cs.ubc.ca/CPSC210-2021W-T1/project_j8a2t">github</a>
+                        <h2 class="section-subtitle section-title--project">LiftWeek</h2>
+                        <a href="https://github.com/kumarpit/cpsc-210">github</a>
                     </div>
                     <p class="tech-stack">Java, JUnit, Design Patterns</p>
-                    <p>Developed a desktop application to design workouts - specifically designed for the nSuns workout program. Focused on writing efficient code by incorporating software design fundamentals and implementing the Singleton and Observer design patterns. Wrote unit tests using the JUnit library and achieved 100% code coverage.</p>
+                    <p>Developed a desktop application to design weekly workout programs. Focused on writing efficient code by incorporating software design fundamentals and implementing the Singleton and Observer design patterns. Wrote unit tests using the JUnit library and achieved 100% code coverage.</p>
                 </div>
             </div>
         </section>

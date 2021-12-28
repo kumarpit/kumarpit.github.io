@@ -42,7 +42,7 @@ h1, .highlighted-text {
 }
 
 .section-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
     margin-bottom: 1em;
 }
 
@@ -85,4 +85,8 @@ footer {
 
 .section-title--about {
     margin-bottom: 15px;
+}
+
+.section-title--project {
+    font-weight: 500;
 }
