@@ -76,7 +76,7 @@ code {
     .experience-date--mobile {
         display: block;
         color: var(--fc-dark);
-        font-style: italic;
+        /* font-style: italic; */
     }
 }
 
