@@ -21,7 +21,7 @@ body {
     radial-gradient(at 59% 35%, hsla(325,61%,70%,1) 0px, transparent 50%);
     width: clamp(300px, 90%, 850px);
     margin: 0 auto;
-    font-size: 1.2rem;
+    font-size: 1.12rem;
     line-height: 1.5;
     min-height: 100vh;
 }
@@ -29,7 +29,6 @@ body {
 .homebody {
     overflow: hidden;
 }
-
 
 .currently {
     line-height: 2;
