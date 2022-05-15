@@ -46,9 +46,9 @@ nav {
 }
 
 .experiences {
-    display: grid;
+    /* display: grid;
     grid-template-columns: 7em 1fr;
-    row-gap: 25px;
+    row-gap: 25px; */
 }
 
 @media screen and (max-width: 490px) {
