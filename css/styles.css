@@ -11,11 +11,35 @@ html {
 }
 
 body {
-    background-color: var(--clr-light);
+    background-color:hsla(161,86%,54%,1);
+    background-image:
+    radial-gradient(at 9% 75%, hsla(212,78%,63%,1) 0px, transparent 50%),
+    radial-gradient(at 97% 49%, hsla(14,75%,69%,1) 0px, transparent 50%),
+    radial-gradient(at 35% 6%, hsla(164,65%,76%,1) 0px, transparent 50%),
+    radial-gradient(at 33% 5%, hsla(170,63%,70%,1) 0px, transparent 50%),
+    radial-gradient(at 95% 39%, hsla(110,81%,76%,1) 0px, transparent 50%),
+    radial-gradient(at 48% 30%, hsla(67,96%,61%,1) 0px, transparent 50%),
+    radial-gradient(at 33% 6%, hsla(189,65%,78%,1) 0px, transparent 50%);
     width: clamp(300px, 90%, 850px);
     margin: 0 auto;
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     line-height: 1.5;
+    min-height: 100vh;
+}
+
+.homebody {
+    overflow: hidden;
+}
+
+
+.currently {
+    line-height: 2;
+}
+
+.go-back {
+    text-decoration: none !important;
+    color: var(--fc-dark) !important;
+    font-family: 'source sans pro' !important;
 }
 
 :root {
@@ -27,6 +51,10 @@ body {
     --fc-dark: rgba(0, 0, 0, 0.5);
     --fc-darker: rgba(0, 0, 0, 0.8);
     --fc-darkest: #000;
+}
+
+a {
+    text-decoration: none;
 }
 
 section {

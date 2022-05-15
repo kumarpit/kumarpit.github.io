@@ -21,18 +21,15 @@
         <link rel="stylesheet" href="./css/typography.css">
         <link rel="stylesheet" href="./prism/prism.css">
     </head>
-    <body>
+    <body class="homebody">
         <header>
             <nav>
                 <ul class="navigation">
-                    <li class="nav-item about"><a href="#about">about</a></li>
-                    <li class="nav-item"><a href="#experience">experience</a></li>
-                    <li class="nav-item"><a href="#projects">projects</a></li>
+                    <li class="nav-item about"><a href="./pages/about.html">about</a></li>
+                    <li class="nav-item"><a href="./pages/experiences.html">experience</a></li>
+                    <li class="nav-item"><a href="./pages/projects.html">projects</a></li>
                     <!-- <li class="nav-item"><a href="#">blog</a></li> -->
                 </ul>
-                <div>
-                    <i id="theme-indicator" class="fas fa-moon"></i>
-                </div>
             </nav>
         </header>
         
@@ -52,9 +49,10 @@
             </div>
             
             <div class="landing-text">
-                <p>Hey, I'm a second-year student at the <span class="highlighted-text">University of British Columbia</span> studying <span class="highlighted-text">Computer Science</span>. I am currently a developer at <a href="https://ubclaunchpad.com/">UBC Launch Pad</a> where I am working in a team to develop a finance management application. I am seeking <span class="highlighted-text">summer 2022 internships</span>.</p>
-                
-                <p>Feel free to contact me at <a href="mailto:kumar.arpit77@yahoo.com">kumar.arpit77@yahoo.com</a> to collaborate on projects or to just have a chat.</p>
+                <p>Hey, I'm a second-year student at the <span class="highlighted-text">University of British Columbia</span> studying <span class="highlighted-text">Computer Science</span>. I am currently a lead frontend developer at <a href="https://ubclaunchpad.com/">Wavy</a>, a UBC-based engineering team building a mobile application for finding friends and events on campus.
+                <br>
+                Feel free to contact me at <a href="mailto:kumar.arpit77@yahoo.com">kumar.arpit77@yahoo.com</a> to collaborate on projects or to just have a chat.
+                </p>
             </div>
 
             <div>
@@ -66,139 +64,27 @@
             </div>
         </section>
 
-        <section class="about" id="about">
-            <h1 class="section-title section-title--about">About</h1>
-
-            
-            <!-- prism is weird -->
-        <pre class="line-numbers"><code class="language-javascript">{ 
-    "currently": "@ubclaunchpad, @ubc-vcl, @wavy",
-    "school": "University of British Columbia", 
-    "major": "Computer Science", 
-    "objective": "Design simple solutions to complex problems", 
-    "location": "Vancouver, Canada" 
-}</code></pre>
-
-
-            <p>Hey, I'm Arpit! Thank you for stopping by. I enjoy writing useful bits of software to make aspects of my life easier. I'm currently focusing on mastering software design fundamentals and learning how to write efficient code. I enjoy the process of creating and am always open to learning new skills and exposing myself to new ideas, so feel free to drop me an email at <a href="mailto:kumar.arpit77@yahoo.com">kumar.arpit77@yahoo.com</a>.
+        <section class="currently">
+            <h2>Currently</h2>
+            <p>Working on my new site, where I hope to begin jouranling my learnings and experiences.</p>
+            <p>Taking a summer course - <span class="highlighted-text">Multivariable Calculus.</span> Yep, we'll see how it goes.</p>
+            <p style="line-height: 1.5;">Reading <a>Indistractable</a> by Nir Eyal. I am continually trying to read more, so if you have any suggestions - please send them my way (especially sci-fi and fiction).</p>
+            <p>Working as the <span class="highlighted-text">Lead Frontend Developer</span> <a href="./pages/experiences.html">@Wavy</a> and as a <span class="highlighted-text">Volunteer Developer</span> <a>@UBC-VCL</a>
             </p>
         </section>
 
-        <section class="experience" id="experience">
-            <h1 class="section-title section-title--experience">Experience</h1>
-            <div class="experiences">
-                <div class="experience-link">
-                    <h3>Jan'22</h3> 
-                </div>
-                
-                <div>
-                    <p><span class="highlighted-text">Frontend Developer</span> at <a href="https://hiwavy.com">Wavy</a></p>
-                    <p class="experience-date--mobile">Jan'22</p>
-                </div>
-
-                <div class="experience-link">
-                    <h3>Jan'22</h3> 
-                </div>
-                
-                <div>
-                    <p><span class="highlighted-text">Developer</span> at <a href="https://viscoglab.psych.ubc.ca/">UBC Visual Cognition Lab</a></p>
-                    <p class="experience-date--mobile">Jan'22</p>
-                </div>
-
-                <div class="experience-link">
-                    <h3>Sept'21 - Present</h3> 
-                    <a href="https://github.com/ubclaunchpad/money-manager">github</a>
-                </div>
-                <div>
-                    <p><span class="highlighted-text">Full Stack Developer</span> at <a href="https://ubclaunchpad.com/">UBC Launch Pad</a></p>
-                    <p class="experience-date--mobile">Sept'21 - Present</p>
-                    <p class="tech-stack">React Native, FastAPI, MongoDB</p>
-                    
-                    <p>Developing a mobile application to make daily finances easier for UBC students. Followed agile development practises and completed the MVP during this school term. Created OAuth 2.0 user authentication flow and setup Pydantic data models and CRUD endpoints for the API. Designed reusable accordion, dropdown and modal components as well as animations using Reanimated.</p>
-
-                    <a href="https://github.com/ubclaunchpad/money-manager" class="experience-link--mobile">github</a>
-
-                </div>
-
-                <div class="experience-link">
-                    <h3>Nov'19 - Feb'20</h3> 
-                    <a href="https://github.com/kumarpit/track-squash">github</a>
-                </div>
-                <div>
-                    <p><span class="highlighted-text">Freelance Developer</span></p>
-                    <p class="experience-date--mobile">Nov'19 - Feb'20</p>
-                    <p class="tech-stack">Java, MySQL</p>
-                    
-                    <p>Built a desktop application for school squash coach to manage and lookup data of 250 students - saved 10-15 minutes out of the 1 hour sports periods as the coach no longer had to use logbooks. Developed an inbuilt scorekeeper to track match scoresheets, which were stored as spreadsheet files in structured directories using the Java XSSF API. Implemented graphical analysis of player data to provide insights on player progress and featured conditional rendering to improve user experience.</p>
-                    <a href="https://github.com/kumarpit/track-squash" class="experience-link--mobile">github</a>
-                </div>
-            </div>
+        <section>
+            <p>Read more about <a>me</a>, <a>my experiences</a> and <a>projects</a>.</p>
         </section>
 
-        <section id="projects">
-            <h1 class="section-title section-title--projects">Projects</h1>
-            <div class="projects">
-                <div class="project">
-                    <div class="project-title">
-                        <h2 class="section-subtitle section-title--project">Detect (nwHacks 2022)</h2>
-                        <a href="https://github.com/kumarpit/detect-nwhacks2022">github</a>
-                    </div>
-                    <p class="tech-stack">Flutter, Firebase, Google ML Kit</p>
-                    <p>Developed a mobile application that scans ingredients in cosmetic products and checks them against a database we curated for any potentially damaging ingredients. Finished top 5 out of over 200 submissions. </p>
-                </div>
-                <div class="project">
-                    <div class="project-title">
-                        <h2 class="section-subtitle section-title--project">Brainstorm</h2>
-                        <div class="project-links">
-                            <a href="https://kumarpit.github.io/brainstorm/">site</a>
-                            <a href="https://github.com/kumarpit/brainstorm">github</a>
-                        </div>
-                    </div>
-                    <p class="tech-stack">Javascript, NodeJS, ShareDB, WebSockets</p>
-                    <p>Currently working on creating a collaborative pinboard allowing teams to share ideas, notes and code snippets when brainstorming for a project.</p>
-                </div>
-
-                <div class="project">
-                    <div class="project-title">
-                        <h2 class="section-subtitle section-title--project">YouTube Library</h2>
-                        <div class="project-links">
-                            <a href="https://watchnow-home.herokuapp.com/">site</a>
-                            <a href="https://github.com/kumarpit/watchnow">github</a>
-                        </div>
-                    </div>
-                    <p class="tech-stack">React, NodeJS, YouTube API, MaterialUI, Heroku</p>
-                    <p>An incredibly simple tool to make organizing playlists easier. Implemented features unavailable on YouTube, such as searching through multiple playlists, moving items from one playlist to another and multi-deletion. Integrated Google OAuth 2.0 to make authenticated API calls and deployed on Heroku.</p>
-                </div>
-
-                <div class="project arcade">
-                    <div class="project-title">
-                        <h2 class="section-subtitle section-title--project">Arcade</h2>
-                        <a href="https://github.com/kumarpit/arcade">github</a>
-                    </div>
-                    <p class="tech-stack">Javascript, WebSockets</p>
-                    <p>Implemented a collection of classic arcade games (Tetris, Asteroids, Battleships, Snake) using Javascript. Designed additional game logic and set up Socket.io server to allow multiplayer support.</p>
-                </div>
-
-                <div class="project">
-                    <div class="project-title">
-                        <h2 class="section-subtitle section-title--project">UBC Courses</h2>
-                        <a href="https://github.com/kumarpit/ubc-courses">github</a>
-                    </div>
-                    <p class="tech-stack">Python, Selenium, BeautifulSoup</p>
-                    <p>Built a command line tool to quickly lookup course seat availability, instructor reviews and other course details. Allows for 100% faster course information access than through the UBC website. Included functionality to automate building and modifying course worklists using Selenium.</p>
-                </div>
-            </div>
-        </section>
-        
-        <footer>
+        <!-- <footer>
             <div>
                 <a href="https://github.com/kumarpit">github</a> <span class="color">/</span>
                 <a href="https://www.linkedin.com/in/krarpit/">linkedin</a> <span class="color">/</span> 
                 <a href="mailto:kumar.arpit77@yahoo.com">email</a>
             </div>
-            <p class="byline">made by arpit kumar</p>
         </footer>
         <script src="./prism/prism.js"></script>
-        <script src="./script/toggleTheme.js"></script>
+        <script src="./script/toggleTheme.js"></script>  -->
     </body>
 </html>
