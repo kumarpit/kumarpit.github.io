@@ -27,19 +27,19 @@
                 <div class="name">
                     <div class="words">
                         <div class="english">
-                            <span><p class="section-title section-title--landing">ARPIT</p></span>
-                            <span><p class="section-title section-title--landing">KUMAR</p></span>
+                            <span><a href="../../index.html" class="section-title section-title--landing">ARPIT</a></span>
+                            <span><a href="../../index.html" class="section-title section-title--landing">KUMAR</a></span>
                         </div>
                         <div class="hindi">
-                            <span><p class="section-title section-title--landing">अर्पित</p></span>
-                            <span><p class="section-title section-title--landing">कुमार</p></span>
+                            <span><a href="../../index.html" class="section-title section-title--landing">अर्पित</a></span>
+                            <span><a href="../../index.html" class="section-title section-title--landing">कुमार</a></span>
                         </div>
                     </div>
                 </div>
                 <ul class="navigation">
-                    <li class="nav-item about"><a href="./about.html">about</a></li>
-                    <li class="nav-item"><a href="./experiences.html">experience</a></li>
-                    <li class="nav-item"><a href="./projects.html">projects</a></li>
+                    <li class="nav-item about"><a href="../about.html">about</a></li>
+                    <li class="nav-item"><a href="../experiences.html">experience</a></li>
+                    <li class="nav-item"><a href="../projects.html">projects</a></li>
                     <!-- <li class="nav-item"><a href="#">blog</a></li> -->
                 </ul>
             </nav>
@@ -47,20 +47,34 @@
         <section class="experience" id="experience">
             <p>Launchpad is a student-run software engineering club on campus that aims to simulate an industry development environment. I learned a tremendous amount at Launchpad - it was my first exposure to an AGILE based team, I attended my first scrum meeting, closed my first ticket, and learned about the various roles a software engineer could play in a project, i.e frontend, backend and devops.</p>
             <br>
+            <p class="highlighted-text">Technologies Used</p>
+            <div style="display: flex; gap: 7px; padding-top: 10px;">
+                <p class="tech-badge">React Native</p>
+                <p class="tech-badge">FastAPI</p>
+                <p class="tech-badge">GCP</p>
+                <p class="tech-badge">JWT</p>
+            </div>
+            <br>
             <p class="highlighted-text">What we did</p>
-            <p>In a team of 6 developers and 2 designers, we developed a mobile application called 'Ledge-it' to make daily finance management easier for university students. Our app included visualizations of monthly spending and incomes through pie charts and graphs, categorization, an easy-to-use UI, and the ability to simply scan a reciept to update spending logs.</p>
+            <p>As a team of 6 developers and 2 designers, we developed a mobile application called 'Ledge-it' to make daily finance management easier for university students. Our app included visualizations of monthly spending and incomes through pie charts and graphs, categorization, an easy-to-use UI, and the ability to simply scan a reciept to update spending logs. Have a look at the <a>github repository</a>.</p>
             <br>
             <p class="highlighted-text">What I did - Backend</p>
             
-            <p>We used the FastAPI framework to develop our server, and it was my first time using this framework - it turned out to be very intuitive. I setup data models and created endpoints to perform CRUD operations on our MongoDB database. I setup a GCP S3 bucket and created endpoints to upload base64 encoded images to the S3 instance as well delete existing images. This turned out to be more difficult than I initially thought and required me to read the GCP documentation a lot more carefully before it finally worked.
+            <p>We used the FastAPI framework to develop our server, and it was my first time using this framework - it turned out to be very intuitive. I setup data models and created endpoints to perform CRUD operations on our MongoDB database. I setup a GCP S3 bucket and created endpoints to upload base64 encoded images to the S3 instance as well delete existing images. This turned out to be more difficult than I initially thought and required me to read through multiple resources online before finally getting it to work.
             </p>
             <br>
-            <p>I also worked on the authentication.</p>
-
-            
+            <p>I also worked on implementing JWT based authentication. During this process, I learned about the differences between session based and JWT based authentication, symmetric and asymmetric encryption and their pros and cons, as well the best practices for storing passwords in a database.</p>
             <br>
             <p class="highlighted-text">What I did - Frontend</p>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsam, dolores aut, recusandae ab est sapiente quo necessitatibus ullam at dolore tempore nulla. Ab ipsa quo nisi facere, in dolorum illo libero esse cupiditate numquam at quae aut repellat assumenda, doloremque fugiat. Quos rerum minus, quidem vero recusandae doloremque at quam suscipit illum fuga, nemo tempore similique. Porro ut veritatis odit voluptas quasi, non id fuga? Vero accusantium corrupti illo tempora ab neque delectus distinctio velit!</p>
+            <p>This is was also my first time using React Native. I had some familiarity with React prior so React Native didn't seem very new. I worked on implementing the navigation for the app as well as components for a few screens - these included modals, pie charts and tables. I also got to work with the Reanimated library to implement a simple animation where the header shrinks as the user scrolls further down. Looking back now at the code I pushed out, I realize that there was a lot that I could abstract out and make reusable to achieve a cleaner component heirarchy.</p>
+            <br>
+            <p class="highlighted-text">Conclusion</p>
+            <p>I learned a lot, met some very smart people and got introduced to the world of software engineering. At the end of the 8 months, I had a decent idea of how software is developed in an AGILE environment, learned about several major topics in software development to further explore and gained some valuable full-stack experience.
+            </p>
+            <br>
+            <p>Also, here is the promo video that the designers on the team created for our app as part of our final presentation.</p>
+            <br>
+            <video src="../../files/Ledge It V2.webm" style="width: 100%"/>
         </section>
     </body>
 </html>
