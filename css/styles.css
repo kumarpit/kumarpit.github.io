@@ -11,17 +11,18 @@ html {
 }
 
 body {
-    background-color:#99ffe9;
+    background-color:#99ffd6;
     background-image:
-    radial-gradient(at 51% 94%, hsla(177,87%,77%,1) 0px, transparent 50%),
-    radial-gradient(at 95% 23%, hsla(23,68%,63%,1) 0px, transparent 50%),
-    radial-gradient(at 71% 80%, hsla(231,71%,75%,1) 0px, transparent 50%),
-    radial-gradient(at 1% 86%, hsla(3,63%,76%,1) 0px, transparent 50%),
-    radial-gradient(at 46% 61%, hsla(33,64%,60%,1) 0px, transparent 50%),
-    radial-gradient(at 59% 35%, hsla(325,61%,70%,1) 0px, transparent 50%);
+    radial-gradient(at 88% 99%, hsla(41,92%,70%,1) 0px, transparent 50%),
+    radial-gradient(at 36% 50%, hsla(3,87%,71%,1) 0px, transparent 50%),
+    radial-gradient(at 90% 50%, hsla(92,67%,66%,1) 0px, transparent 50%),
+    radial-gradient(at 16% 90%, hsla(168,72%,62%,1) 0px, transparent 50%),
+    radial-gradient(at 62% 96%, hsla(88,81%,69%,1) 0px, transparent 50%),
+    radial-gradient(at 94% 98%, hsla(203,63%,77%,1) 0px, transparent 50%),
+    radial-gradient(at 27% 24%, hsla(78,82%,73%,1) 0px, transparent 50%);
     width: clamp(300px, 90%, 850px);
     margin: 0 auto;
-    font-size: 1.12rem;
+    font-size: 1.15rem;
     line-height: 1.5;
     min-height: 100vh;
 }
@@ -103,6 +104,10 @@ code {
         display: block;
         color: var(--fc-dark);
         /* font-style: italic; */
+    }
+
+    body {
+        font-size: 0.9rem !important;
     }
 }
 
