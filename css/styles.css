@@ -91,6 +91,11 @@ code {
 }
 
 @media screen and (max-width: 490px) {
+    nav {
+        flex-direction: column !important;
+        gap: 10px !important;
+        align-items: flex-start !important;
+    }
     .experience-link {
         display: none;
     }
@@ -108,6 +113,23 @@ code {
 
     body {
         font-size: 0.9rem !important;
+    }
+
+    .tech-badge {
+        font-size: 0.8rem !important;
+    }
+
+    .make-column {
+        flex-direction: column !important;
+    }
+
+    .make-column > .highlighted-text {
+        font-size: 0.8rem !important;
+        padding-bottom: 8px;
+    }
+
+    .name {
+        margin-bottom: 10px;
     }
 }
 
