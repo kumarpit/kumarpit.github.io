@@ -22,7 +22,7 @@ body {
     radial-gradient(at 27% 24%, hsla(78,82%,73%,1) 0px, transparent 50%);
     width: clamp(300px, 90%, 850px);
     margin: 0 auto;
-    font-size: 1.15rem;
+    font-size: 1.12rem;
     line-height: 1.5;
     min-height: 100vh;
 }
