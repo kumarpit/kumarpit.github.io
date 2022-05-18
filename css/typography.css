@@ -117,19 +117,17 @@ footer {
 }
 
 .tech-badge {
-    /* d8c3ea */
-    /* daf1a6 */
-    /* bcd9ec */
-    /* c3e7ca */
+    /* background-color: #d8c3ea;
+    background-color:#bcd9ec;
+    background-color: #c3e7ca;
+    background-color: #ecbcbc;
     background-color: #f1e4c2; 
+    background-color: #d1dddf; */
     border-radius: 5px; 
     border: 1px solid var(--fc-dark);
-
     padding: 0px 5px; 
     /* margin-right: 6px; */
-    
     color: var(--fc-darker);
-    
     width: max-content;
     font-size: 1rem;
 }
