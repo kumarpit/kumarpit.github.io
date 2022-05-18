@@ -117,10 +117,12 @@ footer {
 }
 
 .tech-badge {
-    background-color: rgba(0, 0, 0, 0.2); 
+    background-color: palegoldenrod; 
     border-radius: 3px; 
     padding: 0px 5px; 
-    color: rgba(240, 240, 240, 0.9);
+    
+    color: var(--fc-darker);
+    
     width: max-content;
     font-size: 1rem;
 }
