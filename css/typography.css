@@ -38,7 +38,7 @@ body {
 }
 
 .highlighted-text, a {
-    font-family: 'source sans pro';
+    font-family: var(--ff-secondary);
     font-weight: 600;
 }
 
@@ -63,7 +63,7 @@ h1, .highlighted-text {
 }
 
 h2 {
-    font-family: 'source sans pro' !important;
+    font-family: var(--ff-secondary) !important;
 }
 
 h3 {
@@ -86,7 +86,7 @@ ul {
 .nav-item a, .go-home {
     text-decoration: none;
     color: var(--fc-dark);
-    font-family: 'source sans pro';
+    font-family: var(--ff-secondary);
     font-weight: 500;
 }
 
@@ -98,7 +98,7 @@ ul {
 .experience h3 {
     font-size: 1.2rem;
     font-weight: 500;
-    font-family: 'source sans pro';
+    font-family: var(--ff-secondary);
     /* font-style: italic; */
     color: var(--fc-darker);
 }

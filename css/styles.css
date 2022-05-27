@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
 *,
 *::before,
 *::after {
@@ -11,7 +13,7 @@ html {
 }
 
 body {
-    background: #f5f5f5;
+    background: var(--clr-light);
     width: clamp(300px, 90%, 850px);
     margin: 0 auto;
     font-size: 1.12rem;
@@ -30,15 +32,15 @@ body {
 .go-back {
     text-decoration: none !important;
     color: var(--fc-dark) !important;
-    font-family: 'source sans pro' !important;
+    font-family: var(--ff-secondary) !important;
 }
 
 :root {
     --ff-primary: "DM Sans", sans-serif;
-    --ff-secondary: "Source Sans Pro", serif;
+    --ff-secondary: "source sans pro", sans-serif;
 
-    --clr-light: #fff;
-    --clr-dark: #1a1d23;
+    --clr-light: #f5f5f5;
+    --clr-dark: #181a1b;
     --fc-dark: rgba(0, 0, 0, 0.5);
     --fc-darker: rgba(0, 0, 0, 0.8);
     --fc-darkest: #000;
