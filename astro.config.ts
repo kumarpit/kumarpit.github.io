@@ -36,7 +36,7 @@ export default defineConfig({
     shikiConfig: {
       theme: "slack-dark",
       wrap: true,
-      langs: ['c', racket]
+      //      langs: ['c']
     }
   },
   integrations: [expressiveCode(), mdx({}), tailwind({
