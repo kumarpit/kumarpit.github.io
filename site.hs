@@ -14,7 +14,9 @@ main :: IO ()
 
 main  = do 
     generateSyntaxHighlightingCSS
-    hakyll $ do
+    let config = defaultConfiguration
+                   { destinationDirectory = "docs" }  -- <- publish to docs/
+    hakyllWith config $ do
         -- Copy images as-is
         match "images/*" $ do
             route   idRoute
