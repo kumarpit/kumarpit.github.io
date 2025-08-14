@@ -42,6 +42,13 @@ main = do
       route idRoute
       compile compressCssCompiler
 
+    -- About
+    match "about.md" $ do
+        route   $ setExtension "html"
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= relativizeUrls
+
     -- Blog posts
     match "posts/*" $ do
       route $ setExtension "html"
@@ -50,6 +57,23 @@ main = do
           >>= loadAndApplyTemplate "templates/post.html" postCtx
           >>= loadAndApplyTemplate "templates/default.html" postCtx
           >>= relativizeUrls
+
+    -- All posts, notes
+    create ["archive.html"] $ do
+        route idRoute
+        compile $ do
+            posts <- recentFirst =<< loadAll "posts/*"
+            notes <- recentFirst =<< loadAll "notes/*"
+            let archiveCtx =
+                    listField "posts" postCtx (return posts) `mappend`
+                    listField "notes" postCtx (return notes) `mappend`
+                    constField "title" "Archives"            `mappend`
+                    defaultContext
+
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+                >>= relativizeUrls
 
     -- Notes
     match "notes/*" $ do
