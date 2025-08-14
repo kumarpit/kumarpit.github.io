@@ -57,7 +57,23 @@ article .header {
   text-decoration: none;
 }
 
-@media (max-width: 400px) {
+.profile-img {
+    float: right;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    max-width: 250px;
+    height: auto;
+}
+
+@media (max-width: 600px) {
+    .profile-img {
+        float: none;
+        display: block;
+        margin: 0 auto 10px auto;
+    }
+}
+
+@media (max-width: 319px) {
   body {
     width: 90%;
     margin: 0;
@@ -86,7 +102,7 @@ article .header {
   }
 }
 
-@media (min-width: 401px) {
+@media (min-width: 320px) {
   body {
     width: 90%;
     margin: 0;
