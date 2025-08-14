@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Implementing Proper Tail Calls in C</title>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    </head>
+    <body>
+        <main role="main">
+            <header>
+            <div class="logo">
+                <a href="../">Arpit Kumar</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Posts</a>
+            </nav>
+            </header>
+            <h1>Implementing Proper Tail Calls in C</h1>
+            <article>
+    <section class="header">
+        Posted on June  8, 2025
+        
+    </section>
+    <section>
+        <h2 id="what-are-tail-calls">What are tail calls?</h2>
+<p>Tails calls are the recursive calls that are executed as the last statement of procedure. Consider the following Racket program to sum up the elements of a list of numbers.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; (listof Number) -&gt; Number</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; produce the sum of all elements of lon</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>sum lon<span class="op">)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">cond</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>empty? lon<span class="op">)</span> <span class="dv">0</span><span class="op">]</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="kw">else</span> <span class="op">(+</span> <span class="op">(</span>first lon<span class="op">)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>sum <span class="op">(</span>rest lon<span class="op">)))]))</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>sum <span class="op">(</span><span class="kw">list</span><span class="op">))</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>sum <span class="op">(</span><span class="kw">list</span> <span class="dv">1</span><span class="op">))</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>sum <span class="op">(</span><span class="kw">list</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span><span class="op">))</span> <span class="dv">6</span><span class="op">)</span></span></code></pre></div>
+<p>After the first call to <code>sum</code>, our computation can be expressed as <code>(+ 1 (sum (list 2 3)))</code>. After the second call, we get <code>(+ 1 (+ 2 (sum (list 3))))</code> and so on until the base case (i.e the empty list) is reached. Notice how on each call, the <code>+</code> operation needs to wait for the recursive call to return a value, resulting in this ever growing context of pending computations. This becomes clearer when we trace the execution of <code>sum</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;(</span>sum '<span class="op">(</span><span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span><span class="op">))</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="op">(</span>sum '<span class="op">(</span><span class="dv">2</span> <span class="dv">3</span><span class="op">))</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="op">&gt;(</span>sum '<span class="op">(</span><span class="dv">3</span><span class="op">))</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="op">&gt;</span> <span class="op">(</span>sum '<span class="op">())</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span> <span class="op">&lt;</span> <span class="dv">0</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span> &lt;3</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span> <span class="dv">5</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>&lt;6</span></code></pre></div>
+<p>This stack buildup is not ideal. This was just a small example, but imagine if our list was long enough to fill all available memory - we would run out of stack space well before we are able to evaluate our result. Understanding tail recursion can help us avoid this unneccesary build up on the stack. Consider the following modified <code>sum</code> procedure.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; (listof Number) -&gt; Number</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; produce the sum of all elements of lon</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>sum lon<span class="op">)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Accumulator: acc is Number</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Invariant: represents the sum of all elements before the current one</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>local <span class="op">[(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>sum-acc lon acc<span class="op">)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span><span class="kw">cond</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>              <span class="op">[(</span>empty? lon<span class="op">)</span> acc<span class="op">]</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>              <span class="op">[</span><span class="kw">else</span> <span class="op">(</span>sum-acc <span class="op">(</span>rest lon<span class="op">)</span>  <span class="co">;; &lt;-- this is a recursive call at a tail position</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                             <span class="op">(+</span> <span class="op">(</span>first lon<span class="op">)</span> acc<span class="op">))]))]</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>sum-acc lon <span class="dv">0</span><span class="op">)))</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>sum <span class="op">(</span><span class="kw">list</span><span class="op">))</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>sum <span class="op">(</span><span class="kw">list</span> <span class="dv">1</span><span class="op">))</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>sum <span class="op">(</span><span class="kw">list</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span><span class="op">))</span> <span class="dv">6</span><span class="op">)</span></span></code></pre></div>
+<p>Here, we use an accumlator to store the sum so far. Instead of using the stack to store the context of pending computations, we use the accumlator variable. Thus at any given time we are occupying a only a single stack frame since our recursive calls don’t need to wait. The trace of <code>sum-acc</code> reflects this change.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;(</span>sum-acc '<span class="op">(</span><span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span><span class="op">)</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;(</span>sum-acc '<span class="op">(</span><span class="dv">2</span> <span class="dv">3</span><span class="op">)</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;(</span>sum-acc '<span class="op">(</span><span class="dv">3</span><span class="op">)</span> <span class="dv">3</span><span class="op">)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;(</span>sum-acc '<span class="op">()</span> <span class="dv">6</span><span class="op">)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>&lt;6</span></code></pre></div>
+<p>Racket has “proper” tail calls, i.e it does not accumulate any stack space when making a recursive call that appears at a tail position. This means that the following tail-recursive Racket program will simply run forever:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>tick<span class="op">)</span> <span class="op">(</span><span class="kw">begin</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span>displayln 'tick<span class="op">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span>tock<span class="op">)))</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>tock<span class="op">)</span> <span class="op">(</span><span class="kw">begin</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span>displayln 'tock<span class="op">)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span>tick<span class="op">)))</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>tick<span class="op">)</span></span></code></pre></div>
+<p>C, on the other hand, accumulates stack space even with tail recursive procedures. This means that an equivalent <code>tick tock</code> program in C will terminate with a stack overflow error. This article discusses how we can implement “proper” tail calls in C so that procedures like <code>tick-tock</code> will run forever instead of blowing the stack. Our discussion will consider the <a href="https://en.wikipedia.org/wiki/Euclidean_algorithm">Euclidean algorithm</a>, a fundamental recursive algorithm to find the greatest common divisor of two integers. Following is an implementation of the Euclidean algorithm in Racket.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Natural Natural -&gt; Natural</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; runs the Euclidean algorithm on scalars a and b</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>euclid-alg a b<span class="op">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">if</span> <span class="op">(&gt;</span> b a<span class="op">)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>euclid-alg b a<span class="op">)</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">if</span> <span class="op">(=</span> b <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>          a</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>euclid-alg b <span class="op">(</span><span class="kw">modulo</span> a b<span class="op">)))))</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>euclid-alg <span class="dv">87</span> <span class="dv">1</span><span class="op">)</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>euclid-alg <span class="dv">10</span> <span class="dv">2</span><span class="op">)</span> <span class="dv">2</span><span class="op">)</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>euclid-alg <span class="dv">3</span> <span class="dv">7</span><span class="op">)</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test <span class="op">(</span>euclid-alg <span class="dv">24</span> <span class="dv">30</span><span class="op">)</span> <span class="dv">6</span><span class="op">)</span></span></code></pre></div>
+<h2 id="trampolining">Trampolining</h2>
+<p>We will employ a technique called “trampolining” to implement “proper” tail calls in C. A trampoline is nothing but a wrapper around the recursive function. In regular recursion, we have a function calling itself from within. In trampolined recursion, the function doesn’t call itself, instead it returns another function (thus completing the current execution of our function) and this returned function again calls our recursive function. Then we develop a trampoline loop that keeps calling the function returned by our trampolined recursive function until computation is completed. In other words, control flow goes from our recursive function to the trampoline loop and back to the recursive function again and again (hence the name trampolining!). Here is a trampolined implementation of <code>euclid-alg</code> in Racket:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-type trampoline</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>bounce <span class="op">[</span>p <span class="kw">procedure?</span><span class="op">]]</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>dismount <span class="op">[</span>v <span class="op">(</span>λ <span class="op">(</span>x<span class="op">)</span> <span class="dv">#t</span><span class="op">)]])</span> <span class="co">;; v can be any type</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; (trampolineof X) is one of:</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; - (bounce ( -&gt; (trampolineof X)))</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; - (dismount X)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; A simple while loop implementation (to get a more C-like structure)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">;; ( -&gt; Boolean) ( -&gt; Void) -&gt; Void</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>while-fn pred <span class="kw">do</span><span class="op">)</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>when <span class="op">(</span>pred<span class="op">)</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">begin</span> <span class="op">(</span><span class="kw">do</span><span class="op">)</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>while-fn pred <span class="kw">do</span><span class="op">))))</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define-syntax</span><span class="fu"> while</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">syntax-rules</span> <span class="op">()</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">while</span> pred body<span class="op">)</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>while-fn <span class="op">(</span>λ <span class="op">()</span> pred<span class="op">)</span> <span class="op">(</span>λ <span class="op">()</span> body<span class="op">))]))</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">;; (trampolineof X) -&gt; X</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">;; run the given trampoline to completion</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>loop-trampoline t0<span class="op">)</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Accumulator: t is (trampolineof X)</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Invariant: t represents pending computation (if any)</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>local <span class="op">[(</span><span class="ex">define</span><span class="fu"> t </span><span class="op">(</span>void<span class="op">))]</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">begin</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">set!</span> t t0<span class="op">)</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">while</span> <span class="op">(</span>bounce? t<span class="op">)</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span><span class="kw">let</span> <span class="op">([</span>c <span class="op">(</span>bounce-p t<span class="op">)])</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>               <span class="op">(</span><span class="kw">set!</span> t <span class="op">(</span>c<span class="op">))))</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>      <span class="co">;; t is now a dismount</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>dismount-v t<span class="op">))))</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co">;; Natural Natural -&gt; (trampolineof Natural)</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co">;; runs the Euclidean algorithm on scalars a and b</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>euclid-alg a b<span class="op">)</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>local <span class="op">[(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>euclid-alg/tr a b<span class="op">)</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">if</span> <span class="op">(&gt;</span> b a<span class="op">)</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>bounce <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span>euclid-alg/tr b a<span class="op">)))</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">if</span> <span class="op">(=</span> b <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>dismount a<span class="op">)</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>bounce <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span>euclid-alg/tr b <span class="op">(</span><span class="kw">modulo</span> a b<span class="op">)))))))]</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>loop-trampoline <span class="op">(</span>euclid-alg/tr a b<span class="op">))))</span></span></code></pre></div>
+<p>Notice how all recursive calls are represented by the <code>bounce</code> data type and the base case is represented by <code>dismount</code>. Using the information encapsulated by these data representations, the <code>loop-trampoline</code> procedure is able to determine whether or not the computation is complete.</p>
+<h2 id="defunctionalization">Defunctionalization</h2>
+<p>Notice that we use lambda functions in the <code>bounce</code> constructor. C does not have lambdas, and so we aren’t quite ready to translate this Racket code to C. We need to remove any usage of first-class of functions, a process refered to as “defunctionalization”. Defunctionalization entails two key steps:</p>
+<ul>
+<li>Create abstractions for all places a lambda is being applied or constructed</li>
+<li>Then replace the lambda with a data representation</li>
+</ul>
+<p>The only place were we apply the <code>bounce</code> lambdas is in the <code>loop-trampoline</code> procedure. So, we create a new <code>apply/th</code> (read: apply thunk) procedure to abstract away lambda application.</p>
+<blockquote>
+<p>A thunk refers to an argument-less function that mimics lazy evaluations. For example, the procedure <code>(define (lazy-sum) (+ 1 2))</code> is a thunk. By capturing the state of our recursive function at each step, we are creating thunks that get evaluated by the <code>loop-trampoline</code> procedure.</p>
+</blockquote>
+<div class="sourceCode" id="cb8"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>apply/th th<span class="op">)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>match th</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span>p #:when <span class="op">(</span><span class="kw">procedure?</span> p<span class="op">)</span> <span class="op">(</span>p<span class="op">)]))</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; (trampolineof X) -&gt; X</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; run the given trampoline to completion</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>loop-trampoline t0<span class="op">)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Accumulator: t is (trampolineof X)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Invariant: t represents pending computation (if any)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>local <span class="op">[(</span><span class="ex">define</span><span class="fu"> t </span><span class="op">(</span>void<span class="op">))]</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">begin</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">set!</span> t t0<span class="op">)</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">while</span> <span class="op">(</span>bounce? t<span class="op">)</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span><span class="kw">let</span> <span class="op">([</span>c <span class="op">(</span>bounce-p t<span class="op">)])</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>               <span class="op">(</span><span class="kw">set!</span> t <span class="op">(</span>apply/th c<span class="op">))))</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>      <span class="co">;; t is now a dismount</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>dismount-v t<span class="op">))))</span></span></code></pre></div>
+<p>The <code>bounce</code> lambdas are created in the <code>euclid-alg/tr</code> procedure. We introduce new procedures to abstract away these constructions.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Natural Natural -&gt; ( -&gt; (trampolineof Natural))</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; returns the thunk encapsulating the work to be done for the b&gt;a case</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>b&gt;a/th a b<span class="op">)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span>euclid-alg/tr b a<span class="op">)))</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Natural Natural -&gt; ( -&gt; (trampolineof Natural))</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; returns the thunk encapsulating the work to be done for the case when b&lt;=a (b != 0)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>b&lt;=a/th a b<span class="op">)</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span>euclid-alg/tr b <span class="op">(</span><span class="kw">modulo</span> a b<span class="op">))))</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">;; Natural Natural -&gt; ( -&gt; (trampolineof Natural))</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">;; trampolined euclid-alg</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>euclid-alg/tr a b<span class="op">)</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">if</span> <span class="op">(&gt;</span> b a<span class="op">)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>bounce <span class="op">(</span>b&gt;a/th a b<span class="op">))</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">if</span> <span class="op">(=</span> b <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>dismount a<span class="op">)</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>bounce <span class="op">(</span>b&lt;=a/th a b<span class="op">)))))</span></span></code></pre></div>
+<p>Now we are setup to get rid of these first-class functions altogether. To do so, we introduce a new data type – <code>thunk</code>. This will encapsulate the same information that the lambdas did.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-type thunk</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>b&gt;a  <span class="op">(</span>a <span class="kw">number?</span><span class="op">)</span> <span class="op">(</span>b <span class="kw">number?</span><span class="op">)]</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>b&lt;=a <span class="op">(</span>a <span class="kw">number?</span><span class="op">)</span> <span class="op">(</span>b <span class="kw">number?</span><span class="op">)])</span></span></code></pre></div>
+<p>Now we update our <code>apply/th</code> procedure to handle these two thunk variants.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Thunk -&gt; (trampolineof Natural)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; dispatches the appropriate thunk for euclid-alg</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>apply/th th<span class="op">)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>type-case thunk th</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span>b&gt;a  <span class="op">(</span>a b<span class="op">)</span> <span class="op">(</span>euclid-alg/tr b a<span class="op">)]</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span>b&lt;=a <span class="op">(</span>a b<span class="op">)</span> <span class="op">(</span>euclid-alg/tr b <span class="op">(</span><span class="kw">modulo</span> a b<span class="op">))]))</span></span></code></pre></div>
+<p>Now we have a trampolined, defunctionalized version of the Euclidean algorithm. This can easily be translated to C.</p>
+<h2 id="euclidean-algorithm-in-c-with-proper-tail-calls">Euclidean algorithm in C with proper tail calls</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> _thunk <span class="op">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">enum</span> <span class="op">{</span> b_gt_a<span class="op">,</span> b_lte_a <span class="op">}</span> tag<span class="op">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a<span class="op">;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> b<span class="op">;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> values<span class="op">;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> _thunk thunk<span class="op">;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> _trampoline <span class="op">{</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">enum</span> <span class="op">{</span> bounce<span class="op">,</span> dismount <span class="op">}</span> tag<span class="op">;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">union</span> <span class="op">{</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> result<span class="op">;</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    thunk <span class="op">*</span>next<span class="op">;</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> value<span class="op">;</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> _trampoline trampoline<span class="op">;</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>thunk <span class="op">*</span>th_b_gt_a<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>thunk <span class="op">*</span>th_b_lte_a<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>trampoline <span class="op">*</span>apply_th<span class="op">(</span>thunk <span class="op">*</span>th<span class="op">);</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>trampoline <span class="op">*</span>tr_euclid_alg<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> loop_trampoline<span class="op">(</span>trampoline <span class="op">*</span>tr<span class="op">);</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> euclid_alg<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span></code></pre></div>
+<p><br /></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;euclidean.h&quot;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;assert.h&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>thunk <span class="op">*</span>th_b_gt_a<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  thunk <span class="op">*</span>data <span class="op">=</span> <span class="op">(</span>thunk <span class="op">*)</span>malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>thunk<span class="op">));</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  data<span class="op">-&gt;</span>tag <span class="op">=</span> b_gt_a<span class="op">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  data<span class="op">-&gt;</span>values<span class="op">.</span>a <span class="op">=</span> a<span class="op">;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  data<span class="op">-&gt;</span>values<span class="op">.</span>b <span class="op">=</span> b<span class="op">;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> data<span class="op">;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>thunk <span class="op">*</span>th_b_lte_a<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  thunk <span class="op">*</span>data <span class="op">=</span> <span class="op">(</span>thunk <span class="op">*)</span>malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>thunk<span class="op">));</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  data<span class="op">-&gt;</span>tag <span class="op">=</span> b_lte_a<span class="op">;</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  data<span class="op">-&gt;</span>values<span class="op">.</span>a <span class="op">=</span> a<span class="op">;</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  data<span class="op">-&gt;</span>values<span class="op">.</span>b <span class="op">=</span> b<span class="op">;</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> data<span class="op">;</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>trampoline <span class="op">*</span>tr_euclid_alg<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  trampoline <span class="op">*</span>data <span class="op">=</span> <span class="op">(</span>trampoline <span class="op">*)</span>malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>trampoline<span class="op">));</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>b <span class="op">&gt;</span> a<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    thunk <span class="op">*</span>th <span class="op">=</span> th_b_gt_a<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    data<span class="op">-&gt;</span>tag <span class="op">=</span> bounce<span class="op">;</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    data<span class="op">-&gt;</span>value<span class="op">.</span>next <span class="op">=</span> th<span class="op">;</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data<span class="op">;</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>b <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>      data<span class="op">-&gt;</span>tag <span class="op">=</span> dismount<span class="op">;</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>      data<span class="op">-&gt;</span>value<span class="op">.</span>result <span class="op">=</span> a<span class="op">;</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> data<span class="op">;</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>      thunk <span class="op">*</span>th <span class="op">=</span> th_b_lte_a<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>      data<span class="op">-&gt;</span>tag <span class="op">=</span> bounce<span class="op">;</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>      data<span class="op">-&gt;</span>value<span class="op">.</span>next <span class="op">=</span> th<span class="op">;</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> data<span class="op">;</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>trampoline <span class="op">*</span>apply_th<span class="op">(</span>thunk <span class="op">*</span>th<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> a <span class="op">=</span> th<span class="op">-&gt;</span>values<span class="op">.</span>a<span class="op">;</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> b <span class="op">=</span> th<span class="op">-&gt;</span>values<span class="op">.</span>b<span class="op">;</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>th<span class="op">-&gt;</span>tag <span class="op">==</span> b_gt_a<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tr_euclid_alg<span class="op">(</span>b<span class="op">,</span> a<span class="op">);</span></span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tr_euclid_alg<span class="op">(</span>b<span class="op">,</span> a <span class="op">%</span> b<span class="op">);</span></span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> loop_trampoline<span class="op">(</span>trampoline <span class="op">*</span>tr<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>  trampoline <span class="op">*</span>current <span class="op">=</span> tr<span class="op">;</span></span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> <span class="op">(</span>current<span class="op">-&gt;</span>tag <span class="op">==</span> bounce<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>    current <span class="op">=</span> apply_th<span class="op">(</span>current<span class="op">-&gt;</span>value<span class="op">.</span>next<span class="op">);</span></span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> current<span class="op">-&gt;</span>value<span class="op">.</span>result<span class="op">;</span></span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> euclid_alg<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span> <span class="cf">return</span> loop_trampoline<span class="op">(</span>tr_euclid_alg<span class="op">(</span>a<span class="op">,</span> b<span class="op">));</span> <span class="op">}</span></span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span> assert<span class="op">(</span>euclid_alg<span class="op">(</span><span class="dv">54</span><span class="op">,</span> <span class="dv">21</span><span class="op">)</span> <span class="op">==</span> <span class="dv">3</span><span class="op">);</span> <span class="op">}</span></span></code></pre></div>
+<h2 id="continuation-passing-style">Continuation Passing Style</h2>
+<p>This is great, we can now run any tail recursive function in C without blowing the stack. But what if our function cannot easily be expressed as tail recursive? A common exmaple of such functions are those which aren’t singly recursive (i.e make two or more recursive invocations at a time). One such case occurs in the optimal solution to the famous towers of Hanoi problem. Here is a solution to the towers of Hanoi problem in Racket:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Natural Natural Natural Natural -&gt; (listof S-Exp)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; returns the list of steps to solve the tower of Hanoi problem with n disks</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>hanoi n from to other<span class="op">)</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>match n</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span>n #:when <span class="op">(&lt;</span> n <span class="dv">0</span><span class="op">)</span> <span class="op">(</span><span class="kw">error</span> `<span class="op">(</span>number of disks ,n cannot be less than <span class="dv">0</span><span class="op">))]</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="dv">0</span> '<span class="op">()]</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="kw">else</span> <span class="op">(</span><span class="kw">append</span> <span class="op">(</span>hanoi <span class="op">(-</span> n <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                         from</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                         other</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                         to<span class="op">)</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                  `<span class="op">((</span>move disk ,n from ,from to ,to<span class="op">))</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                  <span class="op">(</span>hanoi <span class="op">(-</span> n <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                         other</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                         to</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                         from<span class="op">))]))</span></span></code></pre></div>
+<p>Notice how we need to make two recursive calls in order to solve this problem. Since we have two recursive calls, it is clearly not possible to have both of them be in a tail position. However, we can achieve tail recursion by converting this procedure to use continuation passing style. There are numerous resources online that will be able to explain CPSing much better than I can (for instance, see <a href="https://matt.might.net/articles/by-example-continuation-passing-style/">this article</a>). Here is what a CPSed solution to the towers of Hanoi look like:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Natural Natural Natural Natural Continuation -&gt; (listof S-Exp)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; returns the list of steps to solve the towers of Hanoi problem with n disks -- using CPS!</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>hanoi/cps n from to other k<span class="op">)</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>match n</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span>n #:when <span class="op">(&lt;</span> n <span class="dv">0</span><span class="op">)</span> <span class="op">(</span><span class="kw">error</span> `<span class="op">(</span>number of disks ,n cannot be less than <span class="dv">0</span>!<span class="op">))]</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="dv">0</span> <span class="op">(</span>k '<span class="op">())]</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="kw">else</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>hanoi/cps <span class="op">(-</span> n <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                from</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                other</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                to</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">(</span>λ <span class="op">(</span>v0<span class="op">)</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>                  <span class="op">(</span>hanoi/cps <span class="op">(-</span> n <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>                             other</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                             to</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>                             from</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>                             <span class="op">(</span>λ <span class="op">(</span>v1<span class="op">)</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>                               <span class="op">(</span>k <span class="op">(</span><span class="kw">append</span> v0</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>                                          `<span class="op">((</span>move disk ,n from ,from to ,to<span class="op">))</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                                          v1<span class="op">))))))]))</span></span></code></pre></div>
+<p>Now we can use trampolining and defunctionalization to be able to implement a “proper” tail recursive solution to the towers of Hanoi in C (or really any other language that doesn’t have proper tail calls).</p>
+    </section>
+</article>
+
+
+        </main>
+
+        <footer>
+            Generated by 
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+</html>
