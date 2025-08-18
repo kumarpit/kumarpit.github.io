@@ -225,6 +225,8 @@ Now we have a trampolined, defunctionalized version of the Euclidean algorithm. 
 
 ## Euclidean algorithm in C with proper tail calls
 ```c
+//! euclidean.h
+
 struct _thunk {
   enum { b_gt_a, b_lte_a } tag;
   struct {
@@ -257,6 +259,8 @@ int euclid_alg(int a, int b);
 
 
 ```c
+//! euclidean.c
+
 #include "euclidean.h"
 #include <assert.h>
 #include <stdlib.h>

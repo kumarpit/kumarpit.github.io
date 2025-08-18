@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Untyped Systems (TAPL 3-7)</title>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    </head>
+    <body>
+        <main role="main">
+            <header>
+            <div class="logo">
+                <a href="../">Arpit Kumar</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../archive.html">Archive</a>
+            </nav>
+            </header>
+            <h1>Untyped Systems (TAPL 3-7)</h1>
+            <article>
+    <section class="header">
+        Posted on August 14, 2025
+        
+    </section>
+    <section>
+        <p><a href="https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091">Types and Programming Languages by Benjamin C. Pierce</a></p>
+<h4 id="chapter-3-untyped-arithmetic-expressions">Chapter 3: Untyped Arithmetic Expressions</h4>
+<h5 id="syntax">Syntax</h5>
+<p>There are three ways to define the syntax for our basic untyped arithmetic language:</p>
+<p><strong>Inductively</strong>: The set of terms is the smallest set such that:</p>
+<ol type="1">
+<li><span class="math inline">\(\{ \textbf{true}, \textbf{false}, 0 \} \subseteq \mathcal{T}\)</span><br />
+</li>
+<li>If <span class="math inline">\(t_1 \in \mathcal{T}\)</span>, then <span class="math inline">\(\{ \text{succ } t_1, \text{pred } t_1, \text{iszero } t_1 \} \subseteq \mathcal{T}\)</span><br />
+</li>
+<li>If <span class="math inline">\(t_1 \in \mathcal{T}\)</span>, <span class="math inline">\(t_2 \in \mathcal{T}\)</span>, and <span class="math inline">\(t_3 \in \mathcal{T}\)</span>, then <span class="math inline">\(\text{if } t_1 \text{ then } t_2 \text{ else } t_3 \in \mathcal{T}\)</span></li>
+</ol>
+<p>The word “smallest” here just means that <span class="math inline">\(\mathcal{T}\)</span> has no elements besides the ones required to satisfy these three clauses. Here, since you only build elements that are, by definition, in the set – this is equivalent to saying that there are no duplicates (?).</p>
+<blockquote>
+<p>[!important]
+This is an infinite set!</p>
+</blockquote>
+<p><strong>By inference rules</strong>: The set of terms <span class="math inline">\(T\)</span> is defined by the following rules:</p>
+<p><span class="math display">\[
+\text{true} \in T
+\quad
+\text{false} \in T
+\quad
+0 \in T
+\]</span></p>
+<p><span class="math display">\[
+\frac{t_1 \in T}{\text{succ } t_1 \in T}
+\qquad
+\frac{t_1 \in T}{\text{pred } t_1 \in T}
+\qquad
+\frac{t_1 \in T}{\text{iszero } t_1 \in T}
+\]</span></p>
+<p><span class="math display">\[
+\frac{t_1 \in T \quad t_2 \in T \quad t_3 \in T}
+{\text{if } t_1 \text{ then } t_2 \text{ else } t_3 \in T}
+\]</span></p>
+<p>These are read as: “If premise is true (stuff above the line), then we can derive the conclusion (stuff below the line)”.</p>
+<p>The rules with no premises are known as “axioms”.</p>
+<blockquote>
+<p>[!important]
+What we are calling inference rules here are actually “rule schemas” – since their premises and conclusions may include metavariables. Each schema represents an infinite set of concrete rules that can be obtained by replacing the metavariables with all their appropriate values.</p>
+</blockquote>
+<p><strong>Concretely</strong>: For each natural number <span class="math inline">\(i\)</span>, define a set <span class="math inline">\(S_i\)</span> as follows:</p>
+<p><span class="math display">\[
+S_0 = \varnothing
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+S_{i+1} =\;&amp; \{ \text{true}, \text{false}, 0 \} \\
+&amp;\cup \{ \text{succ } t_1, \text{ pred } t_1, \text{ iszero } t_1 \mid t_1 \in S_i \} \\
+&amp;\cup \{ \text{if } t_1 \text{ then } t_2 \text{ else } t_3 \mid t_1, t_2, t_3 \in S_i \}
+\end{aligned}
+\]</span></p>
+<p>Finally, let</p>
+<p><span class="math display">\[
+S = \bigcup_i S_i.
+\]</span></p>
+<blockquote>
+<p>[!exercise] 3.2.4
+How many elements does <span class="math inline">\(S_3\)</span> have?
+A general formula for the number of elements in each set is given by <span class="math inline">\(|S_{i+1}| = 3 + 3 \times S_i + |S_i|^3\)</span>. We have that <span class="math inline">\(|S_0| = 0\)</span>, so <span class="math inline">\(|S_3| = 59,439\)</span>.</p>
+</blockquote>
+<blockquote>
+<p>[!exercise] 3.2.5
+Show that the sets <span class="math inline">\(S_i\)</span> are cumulative–that is, that for each <span class="math inline">\(i\)</span>, we have <span class="math inline">\(S_i \subseteq S_{i+1}\)</span>.
+Proof. This can be shown by a simple inductive proof.
+<em>Base Case</em>: For <span class="math inline">\(i=0\)</span>, we have that <span class="math inline">\(S_0 = \emptyset\)</span>, so it follows trivially that <span class="math inline">\(S_0 \subseteq S_1\)</span>
+Inductive Hypothesis: Assume that for some <span class="math inline">\(j \geq 0\)</span>, we have that for all <span class="math inline">\(i &lt; j\)</span> <span class="math inline">\(S_i \subseteq S_{i+1}\)</span>.
+Inductive Step: We need to show that <span class="math inline">\(S_i \subseteq S_j\)</span>. We do a case-by-case analysis on the types of terms:
+1. It follows by the definition of <span class="math inline">\(S_j\)</span> that all the constants are in <span class="math inline">\(S_j\)</span>.
+2. For some term of the type <span class="math inline">\(\text{succ }t\)</span>, <span class="math inline">\(\text{pred }t\)</span>, or <span class="math inline">\(\text{iszero }t\)</span>, it follows that <span class="math inline">\(t \in S_{i-1}\)</span>, and therefore, by the inductive hypothesis, <span class="math inline">\(t \in S_i\)</span>. Then, by the construction of <span class="math inline">\(S_j\)</span>, we can see that <span class="math inline">\(\text{succ }t\)</span>, <span class="math inline">\(\text{pred }t\)</span>, and <span class="math inline">\(\text{iszero }t\)</span> are all in <span class="math inline">\(S_j\)</span>.
+3. Follows similarly to 2.</p>
+</blockquote>
+<ul>
+<li>The first two definitions for defining the set of possible terms in the language “simply characterize the set as the smallest set satisfying certain closure properties”, while the concrete definition shows you how to actually construct the set as a limit of a sequence.”</li>
+<li>We can prove that these two definitions are equivalent by showing that <span class="math inline">\(\mathcal{T} = \mathcal{S}\)</span> by showing that <span class="math inline">\(\mathcal{S}\)</span> satisfies the conditions satisfied by <span class="math inline">\(\mathcal{T}\)</span> and by showing that if any set <span class="math inline">\(\mathcal{S}'\)</span> satisfies these conditions, then <span class="math inline">\(\mathcal{S} \subseteq \mathcal{S}'\)</span></li>
+</ul>
+<blockquote>
+<p>[!important] Induction is a prominent theme in working with programming language semantics</p>
+</blockquote>
+<blockquote>
+<p>How terms are evaluated in a language is known as the “semantics” of the language</p>
+</blockquote>
+<p>There are 3 main approaches to formalizing semantics:
+- Operational Semantics
+- Denotational Semantics
+- Axiomatic Semantics</p>
+<p>This book deals exclusively with operational semantics.</p>
+<h5 id="evaluation">Evaluation</h5>
+<blockquote>
+<p>[!definition]
+An evaluation relation is a binary relation between terms <code>t -&gt; t'</code> (pronounced <code>t</code> evaluates to <code>t'</code> in one step).</p>
+</blockquote>
+<ul>
+<li>An inference rule is a set of premises and a conclusion</li>
+</ul>
+<blockquote>
+<p>[!note] Definition
+An instance of an inference rule is obtained by consistently substituting each metavariable with the same term in the conclusion and all premises.</p>
+</blockquote>
+<blockquote>
+<p>[!defintion]
+A rule is <em>satisfied</em> by a relation (i.e <code>t -&gt; t'</code>) if, for each instance of the rule, either the conclusion is in the relation, or one of its premises is not.</p>
+</blockquote>
+<blockquote>
+<p>[!question]
+Not sure what is meant here by “or one of its premises is not” since the evaluation relations are evaluated against inference rules using just their statements.
+A: OH, it means that in the case that a relation matches a rule, the premises of the rule are also derivable (using values for meta-variables based on the relation).</p>
+</blockquote>
+<blockquote>
+<p>[!definition]
+When the pair <code>(t, t')</code> is in the evaluation relation that satisfies the inference rules, we say that the evaluation statement (or judgement) <code>t -&gt; t'</code> is derivable. Another way of reading this is that an evaluation statement is derivable iff you could conjure a derivation tree with <code>t -&gt; t'</code> as its root.</p>
+</blockquote>
+<p>^ This property leads directly to a proof technique called <em>induction on derivations</em>.</p>
+    </section>
+</article>
+
+
+        </main>
+
+        <footer>
+            Generated by 
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+</html>
