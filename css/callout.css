@@ -1,0 +1,87 @@
+:root {
+    --note-color: #3498db;
+    --definition-color: #9b59b6;
+    --theorem-color: #1abc9c;
+    --question-color: #e67e22;
+    --important-color: #e74c3c;
+    --exercise-color: #8e44ad;
+    
+    --title-opacity: 0.7;
+    --bg-opacity: 0.1;
+}
+
+/* === Base Callout Styling === */
+.callout {
+    position: relative;
+    padding: 1.2em 1em 0.8em 1em;
+    margin: 1em 0;
+    border-radius: 6px;
+}
+
+.callout::before {
+    display: block;
+    font-weight: bold;
+    text-transform: none;
+    margin-bottom: 0.3em;
+}
+
+.callout:hover {
+    filter: brightness(1.05);
+}
+
+/* === Callout Types === */
+.callout.note {
+    border-left: 4px solid var(--note-color);
+    background-color: rgba(52, 152, 219, var(--bg-opacity));
+}
+.callout.note::before { 
+    content: "Note"; 
+    color: rgba(52, 152, 219, var(--title-opacity)); 
+}
+
+.callout.definition {
+    border-left: 4px solid var(--definition-color);
+    background-color: rgba(155, 89, 182, var(--bg-opacity));
+}
+.callout.definition::before { 
+    content: "Definition"; 
+    color: rgba(155, 89, 182, var(--title-opacity)); 
+}
+
+.callout.theorem {
+    border-left: 4px solid var(--theorem-color);
+    background-color: rgba(26, 188, 156, var(--bg-opacity));
+}
+.callout.theorem::before { 
+    content: "Theorem"; 
+    color: rgba(26, 188, 156, var(--title-opacity)); 
+    font-style: normal;
+}
+
+.callout.question {
+    border-left: 4px solid var(--question-color);
+    background-color: rgba(230, 126, 34, var(--bg-opacity));
+}
+.callout.question::before { 
+    content: "Question"; 
+    color: rgba(230, 126, 34, var(--title-opacity)); 
+}
+
+.callout.important {
+    border-left: 4px solid var(--important-color);
+    background-color: rgba(231, 76, 60, var(--bg-opacity));
+}
+.callout.important::before { 
+    content: "Important"; 
+    color: rgba(231, 76, 60, var(--title-opacity)); 
+}
+
+/* === Exercise Callout === */
+.callout.exercise {
+    border-left: 4px solid var(--exercise-color);
+    background-color: rgba(142, 68, 173, var(--bg-opacity));
+}
+.callout.exercise::before {
+    content: "Exercise";
+    color: rgba(142, 68, 173, var(--title-opacity));
+}
