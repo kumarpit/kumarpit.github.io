@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Bidirectional Typing</title>
+        <title>[Paper] Bidirectional Typing Rules: A Tutorial</title>
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <link rel="stylesheet" href="../css/default.css" />
         <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
@@ -22,14 +22,84 @@
                 <a href="../archive.html">Archive</a>
             </nav>
             </header>
-            <h1>Bidirectional Typing</h1>
+            <h1>[Paper] Bidirectional Typing Rules: A Tutorial</h1>
             <article>
     <section class="header">
         Posted on August  4, 2025
         
     </section>
     <section>
-        <p><a href="https://dl.acm.org/doi/10.1145/3450952">Dunfield, J., &amp; Krishnaswami, N. (2021). Bidirectional typing. ACM Computing Surveys, 54(5), Article 98:1–98:38</a></p>
+        <p><a href="https://www.cs.cmu.edu/~fp/courses/15312-f04/handouts/15-bidirectional.pdf">15-312: Foundations of Programming Languages</a></p>
+<p><a href="https://davidchristiansen.dk/tutorials/bidirectional.pdf">David Christiansen’s tutorial on Bidirectional Typing</a></p>
+<div class="callout note">
+<p>Motivation: Type system is not the same thing as an efficient algorithm to check that a term inhabits some type or a means of synthesizing a type for some term.</p>
+</div>
+<ul>
+<li>It is also not always possible to translate typing rules into an algorithm staightforwardly by treating each rule as a recursive function where premises are called to check the conclusion.</li>
+<li>Only systems that are <strong><em>syntax-directed</em></strong> may be translated this way – many actual programming languages are not described in this manner.</li>
+</ul>
+<div class="callout important">
+<p>What is a <strong><em>syntax-directed</em></strong> system?
+… is one in which each typing judgement has a unique derivation, determined entirely by the syntactic structure of the term in question. These systems allow typing rules to be considered as pattern-match cases in a recursive function over the term being checked.</p>
+</div>
+<ul>
+<li>Bidirectional typing rules are one technique for making typing rules syntax-directed – and therefore enabling the trivial construction of an algorithm for typechecking.</li>
+</ul>
+<p>This technique has a few advantages:
+- Understandable and produces good error messages
+- Relatively few type annotations are required
+- Scales well when new features are added to the language</p>
+<div class="callout important">
+<p>Bidirectional systems support a style of type annotation where an entire term is annotated once at the top level, rather than sprinkling annotations throughout the code (this seems similar to the style employed by typed racket, Sorbet, etc.)</p>
+</div>
+<div class="callout question">
+<p>How can a typing rule not be syntax-directed?
+There are two primary ways in which this may happen:
+- it might be ambiguous in the conclusion
+- it might contain a premise that is not determined by the conclusion</p>
+</div>
+<p>The author discusses an example of this by using STLC and noting that, in the traditional presentation, the typing rule for abstraction makes the system not be syntax-directed since it requires use to “invent” a type for the argument. This problem is usually solved by providing an annotation for the argument explicitly.</p>
+<p>![[Pasted image 20251012212539.png]]</p>
+<div class="callout note">
+<p>An alternative solution than bidirectional type checking here is Damas and Milner’s Algorithm W</p>
+</div>
+<ul>
+<li>In the bidirectional typing rule case, we need to introduce a syntax for type annotating an entire term:</li>
+</ul>
+<p><span class="math display">\[ t : \mathcal{T} \]</span></p>
+<p>So now, we run the type checker in two modes – inference mode and type checking – these mode mutually rely on one another.</p>
+<h4 id="if-you-can-infer-the-type-of-some-term-you-obviously-check-against-a-type">1. If you can infer the type of some term, you obviously check against a type</h4>
+<p>![[Pasted image 20251013104026.png]]</p>
+<div class="callout important">
+<p>Notice that you can go from inference to checking mode, but not the other way around (in most cases).</p>
+</div>
+<h4 id="type-annotations-provide-the-means-of-switching-from-checking-mode-to-inference-mode">2. Type annotations provide the means of switching from checking mode to inference mode</h4>
+<p>![[Pasted image 20251013104219.png]]</p>
+<p>![[Pasted image 20251013104316.png]]</p>
+<ul>
+<li>Just as the variables bound in function abstractions would require annotations in the syntax-directed unidirectional simply-typed λ-calculus, functions must be checked against some type. This prevents us from having to guess the type τ1 of the argument:</li>
+</ul>
+<p>![[Pasted image 20251013104447.png]]</p>
+<p>Example derivation for Boolean function composition:</p>
+<p>![[Pasted image 20251013105548.png]]</p>
+<div class="callout important">
+<p>Remember that the derivation, like the bidirectional typing rules, should be read bottom-to-top and left-to-right. This means that the results of previous “function calls” are available to later “calls”, which is why we have the value to fill out the metavariable with when we check the type of a function argument against the domain of the inferred type of the function.</p>
+</div>
+<p>^ i.e we have <span class="math inline">\(\mathcal{T}_1\)</span> available in the second permise of the function application rule (BT-APP).</p>
+<p>![[Pasted image 20251013110047.png]]</p>
+<h4 id="drawbacks">Drawbacks</h4>
+<p>While Section 1 presented some of the advantages of a bidirectional type system, there are certainly trade-offs. Perhaps the most serious is that variable substitution no longer works for typing derivations. In particular, the rules provided in Section 1.1 allow a variable in a derivation to be replaced by the derivation for a term of the same type. This is not the case in the bidirectional system of Section 1.2, because variables are checked using inference mode, while many interesting constructs for the language must be checked in checking mode.</p>
+<p>In other words:
+::: {.callout .important}
+In bidirectional systems, <code>x</code> can appear in <em>inference</em> positions (like as function argument or head). But <code>s</code> might only _check_against <code>τ</code>, not <em>infer</em> it. There’s no general rule to turn a checking derivation into an inference one.
+:::</p>
+<p>An example:
+Γ, x : Int ⊢ x ⇒ Int</p>
+<p>Γ ⊢ λy. y ⇐ Int → Int</p>
+<p>^ both terms here have the same type, but notice that the second term doesn’t infer, it just checks against the type. So these terms cannot be used interchangeably.</p>
+<p>i.e
+Γ, x : Int → Int ⊢ x 3 ⇒ Int is valid, but
+Γ ⊢ (λy. y) 3 ⇒ Int is not!</p>
     </section>
 </article>
 

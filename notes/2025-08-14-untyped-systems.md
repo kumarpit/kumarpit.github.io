@@ -1,5 +1,5 @@
 ---
-title: "Untyped Systems (TAPL 3-7)"
+title: "[Book] Untyped Systems (TAPL 3-7)"
 description: "Notes from my reading of 'Types and Programming Languages' chapters 3-7"
 ---
 [Types and Programming Languages by Benjamin C. Pierce](https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091)
