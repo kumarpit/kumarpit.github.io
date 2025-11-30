@@ -1,5 +1,5 @@
 ---
-title: "[Paper] Bidirectional Typing Rules: A Tutorial"
+title: "Bidirectional Typing Rules: A Tutorial"
 ---
 ---
 title: "[Paper] Bidirectional Typing Rules: A Tutorial"

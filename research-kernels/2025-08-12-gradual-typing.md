@@ -1,5 +1,5 @@
 ---
-title: "[Paper] Gradual Typing for Functional Languages"
+title: "Gradual Typing for Functional Languages"
 ---
 
 [Siek, Jeremy G., and Walid Taha. "Gradual Typing for Functional Languages"](http://scheme2006.cs.uchicago.edu/13-siek.pdf)

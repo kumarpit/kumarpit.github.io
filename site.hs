@@ -1,12 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+import Control.Monad (forM)
 import Data.Default (def)
 import Data.Functor.Identity (runIdentity)
+import Data.List (sortBy, groupBy)
+import qualified Data.Map as M
+import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Monoid (mappend)
-import Data.Text (Text)
-import qualified Data.Text as T
+import Data.Ord (comparing)
 import Hakyll
-import Text.Pandoc.Highlighting (Style, haddock, styleToCss)
+import System.FilePath ((-<.>))
+import Text.Pandoc.Highlighting (Style, haddock, pygments, styleToCss)
 import Text.Pandoc.Options
   ( Extension
       ( Ext_backtick_code_blocks,
@@ -37,6 +41,11 @@ main = do
       route idRoute
       compile copyFileCompiler
 
+    -- Copy JavaScript as-is
+    match "js/*" $ do
+      route idRoute
+      compile copyFileCompiler
+
     -- Compress CSS
     match "css/*" $ do
       route idRoute
@@ -58,15 +67,17 @@ main = do
           >>= loadAndApplyTemplate "templates/default.html" postCtx
           >>= relativizeUrls
 
-    -- All posts, notes
+    -- All posts, books, research kernels
     create ["archive.html"] $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
-            notes <- recentFirst =<< loadAll "notes/*"
+            books <- recentFirst =<< loadAll "books/*"
+            researchKernels <- recentFirst =<< loadAll "research-kernels/*"
             let archiveCtx =
                     listField "posts" postCtx (return posts) `mappend`
-                    listField "notes" postCtx (return notes) `mappend`
+                    groupedBooksField "groupedBooks" books `mappend`
+                    listField "researchKernels" postCtx (return researchKernels) `mappend`
                     constField "title" "Archives"            `mappend`
                     defaultContext
 
@@ -76,7 +87,15 @@ main = do
                 >>= relativizeUrls
 
     -- Notes
-    match "notes/*" $ do
+    match "books/*" $ do
+      route $ setExtension "html"
+      compile $
+        pandocCompiler_
+          >>= loadAndApplyTemplate "templates/post.html" postCtx
+          >>= loadAndApplyTemplate "templates/default.html" postCtx
+          >>= relativizeUrls
+
+    match "research-kernels/*" $ do
       route $ setExtension "html"
       compile $
         pandocCompiler_
@@ -89,15 +108,17 @@ main = do
       route idRoute
       compile $ do
         posts <- recentFirst =<< loadAll "posts/*"
-        notes <- recentFirst =<< loadAll "notes/*"
+        books <- recentFirst =<< loadAll "books/*"
+        researchKernels <- recentFirst =<< loadAll "research-kernels/*"
         let indexCtx =
               listField "posts" postCtx (return posts)
-                `mappend` listField "notes" postCtx (return notes)
+                `mappend` groupedBooksField "groupedBooks" books
+                `mappend` listField "researchKernels" postCtx (return researchKernels)
                 `mappend` defaultContext
 
         getResourceBody
           >>= applyAsTemplate indexCtx
-          >>= loadAndApplyTemplate "templates/default.html" indexCtx
+          >>= loadAndApplyTemplate "templates/home.html" indexCtx
           >>= relativizeUrls
 
     -- Templates
@@ -110,9 +131,42 @@ postCtx =
   dateField "date" "%B %e, %Y"
     `mappend` defaultContext
 
+-- Context for grouped books (with nested notes)
+groupedBooksField :: String -> [Item String] -> Context String
+groupedBooksField name items = field name $ \_ -> do
+    -- Get metadata for all items and group by "book" field
+    itemsWithMeta <- mapM getItemMeta items
+    let groupedMap = foldr addToGroup M.empty itemsWithMeta
+    let groups = M.toList groupedMap
+
+    -- Generate HTML for nested list
+    return $ concatMap renderBookGroup groups
+  where
+    getItemMeta item = do
+      metadata <- getMetadata (itemIdentifier item)
+      return (item, metadata)
+
+    addToGroup (item, metadata) acc =
+      let bookName = fromMaybe "Untitled" $ lookupString "book" metadata
+      in M.insertWith (++) bookName [(item, metadata)] acc
+
+    renderBookGroup (bookTitle, notesWithMeta) =
+      "<div style=\"margin-bottom: 1.5rem;\">\n" ++
+      "  <strong>" ++ bookTitle ++ "</strong>\n" ++
+      "  <ul>\n" ++
+      concatMap renderNote (sortBy (comparing (itemIdentifier . fst)) notesWithMeta) ++
+      "  </ul>\n" ++
+      "</div>\n"
+
+    renderNote (item, metadata) =
+      let identifier = itemIdentifier item
+          url = toUrl $ toFilePath identifier -<.> "html"
+          title = fromMaybe "Untitled" $ lookupString "title" metadata
+      in "    <li><a href=\"" ++ url ++ "\">" ++ title ++ "</a></li>\n"
+
 --------------------------------------------------------------------------------
 syntaxHighlightingStyle :: Style
-syntaxHighlightingStyle = haddock
+syntaxHighlightingStyle = pygments  -- Change this to: pygments, tango, espresso, zenburn, kate, monochrome, breezeDark, or haddock
 
 generateSyntaxHighlightingCSS :: IO ()
 generateSyntaxHighlightingCSS = do

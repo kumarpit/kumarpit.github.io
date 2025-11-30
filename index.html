@@ -1,7 +1,7 @@
 ---
 title: नमस्ते
 ---
-<img src="/images/cover.jpg" class="profile-img" />
+<!-- <img src="/images/cover.jpg" class="profile-img" /> -->
 <p>Hey! I'm Arpit. Welcome to my little corner of the internet. Here you can find a collection of my thoughts and notes on topics that interest me - mainly relating to programming language theory, distributed systems, and cloud infrastructure.</p>
 
 <p>I'm currently in the final year of my undergraduate studies at the University of British Columbia where I am pursuing a double major in Computer Science and Mathematics.</p>
@@ -23,9 +23,12 @@ title: नमस्ते
     $endfor$
 </ul>
 
-<h3>Recent Notes</h3>
+<h3>Books</h3>
+$groupedBooks$
+
+<h3>Research Kernels</h3>
 <ul>
-    $for(notes)$
+    $for(researchKernels)$
         <li>
             <a href="$url$">$title$</a>
         </li>

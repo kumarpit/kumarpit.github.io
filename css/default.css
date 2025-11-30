@@ -1,18 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yatra+One&display=swap');
+
+:root {
+  /* Light mode colors */
+  --color-brand: #4e4bec;
+  --color-brand-faded: #ececfd;
+  --color-text: #333333;
+  --color-text-muted: #666666;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f8f8ff;
+  --color-border: #e5e5e5;
+}
+
+/* Dark mode via system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-brand: #ffcccc;
+    --color-brand-faded: rgba(255, 204, 204, 0.15);
+    --color-text: rgb(217, 215, 224);
+    --color-text-muted: rgb(160, 158, 167);
+    --color-bg: rgb(19, 18, 23);
+    --color-bg-alt: #1b191f;
+    --color-border: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Dark mode via manual toggle */
+:root[data-theme="dark"] {
+  --color-brand: #ffcccc;
+  --color-brand-faded: rgba(255, 204, 204, 0.15);
+  --color-text: rgb(217, 215, 224);
+  --color-text-muted: rgb(160, 158, 167);
+  --color-bg: rgb(19, 18, 23);
+  --color-bg-alt: #1b191f;
+  --color-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
 
 html {
   font-size: 62.5%;
 }
 
 body {
-  font-size: 1.4rem;
-  line-height: 1.5;
-  color: #000;
-  font-family: 'Merriweather', serif;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 header {
-  border-bottom: 0.2rem solid #000;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 3.2rem;
 }
 
 nav {
@@ -20,85 +65,234 @@ nav {
 }
 
 nav a {
-  font-weight: bold;
-  color: black;
+  font-weight: 600;
+  color: var(--color-text);
   text-decoration: none;
+  transition: color 0.15s ease-in;
+}
+
+nav a:hover {
+  color: var(--color-brand);
 }
 
 footer {
-  margin-top: 3rem;
-  padding: 1.2rem 0;
-  border-top: 0.2rem solid #000;
-  font-size: 1.2rem;
-  color: #555;
+  margin-top: 12.8rem;
+  padding: 3.2rem 0;
+  border-top: 1px solid var(--color-border);
+  font-size: 1.4rem;
+  color: var(--color-text-muted);
+}
+
+footer a {
+  color: var(--color-brand);
+  text-decoration: none;
+  transition: color 0.15s ease-in;
+}
+
+footer a:hover {
+  text-decoration: underline;
 }
 
 h1 {
-  font-size: 2.4rem;
-  font-family: 'Merriweather', serif;
-  font-weight: 700; /* Bolder weight for headings */
+  font-size: 3.2rem;
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text);
+  margin-top: 0;
+  margin-bottom: 1.6rem;
+}
+
+h1.devanagari {
+  font-family: 'Yatra One', serif;
+  font-size: 4.8rem;
+  color: var(--color-text);
 }
 
 h2 {
+  font-size: 2.4rem;
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text);
+  margin-top: 3.2rem;
+  margin-bottom: 1.6rem;
+}
+
+h3 {
   font-size: 2rem;
-  font-family: 'Merriweather', serif;
-  font-weight: 700; /* Bolder weight for headings */
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text);
+  margin-top: 2.4rem;
+  margin-bottom: 1.6rem;
 }
 
 article .header {
   font-size: 1.4rem;
   font-style: italic;
-  color: #555;
+  color: var(--color-text-muted);
+  margin-bottom: 3.2rem;
+}
+
+a {
+  color: var(--color-brand);
+  text-decoration: none;
+  transition: color 0.15s ease-in;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .logo a {
-  font-weight: bold;
-  color: #000;
+  font-weight: 700;
+  color: var(--color-text);
   text-decoration: none;
+  transition: color 0.15s ease-in;
+}
+
+.logo a:hover {
+  color: var(--color-brand);
 }
 
 .profile-img {
-    float: right;
-    margin-left: 20px;
-    margin-bottom: 10px;
-    max-width: 250px;
-    height: auto;
+  float: right;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
 }
 
+/* Code blocks */
+pre,
+code {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+pre {
+  background-color: transparent;
+  padding: 0;
+  overflow-x: auto;
+  margin: 1.6rem 0;
+}
+
+code {
+  background-color: transparent;
+  padding: 0;
+}
+
+pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Table of contents */
+.toc-box {
+  border: 1px solid var(--color-border);
+  padding: 1.6rem;
+  margin-bottom: 3.2rem;
+  border-radius: 8px;
+  background-color: var(--color-bg-alt);
+}
+
+.toc {
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--color-text);
+}
+
+.toc h3 {
+  margin-top: 0;
+  margin-bottom: 1.6rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.8rem;
+}
+
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc ul li {
+  margin-bottom: 0.8rem;
+}
+
+.toc ul li a {
+  text-decoration: none;
+  color: var(--color-brand);
+  transition: color 0.15s ease-in;
+}
+
+.toc ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive layout */
 @media (max-width: 600px) {
-    .profile-img {
-        float: none;
-        display: block;
-        margin: 0 auto 10px auto;
-    }
+  .profile-img {
+    float: none;
+    display: block;
+    margin: 0 auto 1.6rem auto;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+  }
+
+  h1.devanagari {
+    font-size: 3.2rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+  }
 }
 
 @media (max-width: 319px) {
   body {
     width: 90%;
     margin: 0;
-    padding: 0 5%;
+    padding: 2rem 5%;
   }
+
   header {
-    margin: 4.2rem 0;
+    margin: 3.2rem 0;
   }
+
   nav {
-    margin: 0 auto 3rem;
+    margin: 0 auto 3.2rem;
     text-align: center;
   }
+
   footer {
     text-align: center;
   }
+
   .logo {
     text-align: center;
-    margin: 1rem auto 3rem;
+    margin: 1.6rem auto 3.2rem;
   }
+
   .logo a {
     font-size: 2.4rem;
   }
+
   nav a {
     display: block;
     line-height: 1.6;
+    margin-bottom: 0.8rem;
   }
 }
 
@@ -106,110 +300,92 @@ article .header {
   body {
     width: 90%;
     margin: 0;
-    padding: 0 5%;
+    padding: 2rem 5%;
   }
+
   header {
-    margin: 4.2rem 0;
+    margin: 3.2rem 0;
   }
+
   nav {
-    margin: 0 auto 3rem;
+    margin: 0 auto 3.2rem;
     text-align: center;
   }
+
   footer {
     text-align: center;
   }
+
   .logo {
     text-align: center;
-    margin: 1rem auto 3rem;
+    margin: 1.6rem auto 3.2rem;
   }
+
   .logo a {
     font-size: 2.4rem;
   }
+
   nav a {
     display: inline;
-    margin: 0 0.6rem;
+    margin: 0 1.2rem;
   }
 }
 
 @media (min-width: 640px) {
   body {
-    width: 70rem;
+    max-width: 70rem;
     margin: 0 auto;
-    padding: 0;
+    padding: 3.2rem 2rem;
   }
+
   header {
-    margin: 0 0 3rem;
-    padding: 1.2rem 0;
+    margin: 0 0 4.8rem;
+    padding: 1.6rem 0;
   }
+
   nav {
     margin: 0;
     text-align: right;
   }
+
   nav a {
-    margin: 0 0 0 1.2rem;
+    margin: 0 0 0 1.6rem;
     display: inline;
   }
+
   footer {
     text-align: right;
   }
+
   .logo {
     margin: 0;
     text-align: left;
   }
+
   .logo a {
     float: left;
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 }
 
-.toc-box {
-  /* This box is the container for the entire table of contents */
-  border: 1px solid #ccc;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
+@media (min-width: 832px) {
+  h1 {
+    font-size: 4rem;
+  }
 
-.toc {
-  /* This div holds the title and the list of links */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: #333;
-}
+  h1.devanagari {
+    font-size: 5.2rem;
+  }
 
-.toc h3 {
-  /* Styling for the table of contents title */
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 0.5rem;
-}
+  h2 {
+    font-size: 2.8rem;
+  }
 
-.toc ul {
-  /* The main list container */
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+  h3 {
+    font-size: 2.2rem;
+  }
 
-.toc ul li {
-  /* Each list item */
-  margin-bottom: 0.5rem;
-}
-
-.toc ul li a {
-  /* The links themselves */
-  text-decoration: none;
-  color: #007bff;
-  transition: color 0.2s ease-in-out;
-}
-
-.toc ul li a:hover {
-  /* Highlight links on hover */
-  color: #0056b3;
-  text-decoration: underline;
+  body {
+    padding: 6.4rem 2rem;
+  }
 }
