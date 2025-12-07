@@ -1,0 +1,6 @@
+- [ ] Connect raindrop account
+- [ ] Add badges
+- [ ] Add section on open-source contributions
+- [ ] Add art
+- [ ] Add a sectoin on course notes (including course you do on your own time)
+- [ ] Virtual bookshelf like https://spongeboi.com
