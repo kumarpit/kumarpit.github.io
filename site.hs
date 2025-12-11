@@ -151,12 +151,18 @@ groupedBooksField name items = field name $ \_ -> do
       in M.insertWith (++) bookName [(item, metadata)] acc
 
     renderBookGroup (bookTitle, notesWithMeta) =
-      "<div style=\"margin-bottom: 1.5rem;\">\n" ++
-      "  <strong>" ++ bookTitle ++ "</strong>\n" ++
-      "  <ul>\n" ++
-      concatMap renderNote (sortBy (comparing (itemIdentifier . fst)) notesWithMeta) ++
-      "  </ul>\n" ++
-      "</div>\n"
+      if length notesWithMeta == 1
+        then renderSingleNote bookTitle (head notesWithMeta)
+        else "<li>" ++ bookTitle ++ "\n" ++
+             "  <ul>\n" ++
+             concatMap renderNote (sortBy (comparing (itemIdentifier . fst)) notesWithMeta) ++
+             "  </ul>\n" ++
+             "</li>\n"
+
+    renderSingleNote bookTitle (item, metadata) =
+      let identifier = itemIdentifier item
+          url = toUrl $ toFilePath identifier -<.> "html"
+      in "<li><a href=\"" ++ url ++ "\">" ++ bookTitle ++ "</a></li>\n"
 
     renderNote (item, metadata) =
       let identifier = itemIdentifier item
