@@ -34,10 +34,176 @@
         <p><strong>Authors:</strong> Jason Hemann, Daniel P. Friedman<br />
 <strong>Venue:</strong> Scheme and Functional Programming Workshop 2013<br />
 <strong>Paper:</strong> <a href="http://webyrd.net/scheme-2013/papers/HemannMuKanren2013.pdf">PDF</a></p>
-<h2 id="overview">Overview</h2>
-<p>µKanren is a minimal implementation of the core miniKanren language for relational programming.</p>
-<h2 id="key-contributions">Key Contributions</h2>
-<h2 id="notes">Notes</h2>
+<p><a href="https://io.livecode.ch/learn/webyrd/webmk">Interactive miniKanren tutorial</a></p>
+<ul>
+<li>miniKanren is a logic programming language with constraints (see <a href="https://en.wikipedia.org/wiki/Constraint_logic_programming">Constraint Logic Programming</a>)</li>
+<li>Original published microKanren implementation was 265 lines of Scheme code</li>
+</ul>
+<div class="callout important">
+<p>The authors of this paper argue that buried within those 265 lines is a “small, beautiful, relational programming language seeking to get out”.</p>
+</div>
+<ul>
+<li>The authors draw parallels between the design philosophy of microKanren and microkernels (like <a href="https://github.com/kumarpit/burbotOS">BarrelFish</a>!)–just like microkernels, microKanren pushes a lot of the miniKanren interface to user-space, focusing just on the primitives required to make implementing those interfaces possible</li>
+</ul>
+<h4 id="what-do-we-need-in-order-to-have-a-minikanren">What do we need in order to have a miniKanren?</h4>
+<p>Computation in miniKanren proceeds by the application of “goals” to “states”. Goals can either succeed, or fail – if they succeed, they return a stream of all states that satisfy the goal. <code>States</code> store the “substitution list” (i.e mapping of logic variables to their instantiated terms), and the next free variable index (more on this later).</p>
+<p>This implies the following types:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; State is (PairOf (AssociationListOf Variable μKanrenTerm) Integer)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; Goal is State -&gt; (StreamOf State)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> empty-state </span>'<span class="op">(()</span> . <span class="dv">0</span><span class="op">))</span></span></code></pre></div>
+<p>Before moving on, it is important to clarify what constitutes a “term” in microKanren:</p>
+<div class="callout definition">
+<p>A term in microKanren is either a logic variable, a primitive racket type (strings, numbers, etc), or a pair of microKanren terms (and consequently, lists). Since microKanren is embedded within Racket, you can use more data structures (such as hashes), but these would simply use a <code>eqv?</code> check when checking for unification (therefore, hashes containing logic variables will treat the logic variable literally, rather than running a search for an appropriate value for it).</p>
+</div>
+<h6 id="logic-variables">Logic Variables</h6>
+<p>These are represented as vectors containing a single index–logic variable equality is determined by co-incidence of the indices in the vectors</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Integer -&gt; Variable</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>var c<span class="op">)</span> <span class="op">(</span><span class="kw">vector</span> c<span class="op">))</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; Any -&gt; Boolean</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Returns true iff the given argument represents a variable </span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>var? v<span class="op">)</span> <span class="op">(</span><span class="kw">vector?</span> v<span class="op">))</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; Variable Variable -&gt; Boolean</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Returns true iff the two variables are equal, i.e have the same</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">;; variable index</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>var=? v1 v2<span class="op">)</span> <span class="op">(</span><span class="kw">equal?</span> <span class="op">(</span><span class="kw">vector-ref</span> v1 <span class="dv">0</span><span class="op">)</span> <span class="op">(</span><span class="kw">vector-ref</span> v2 <span class="dv">0</span><span class="op">)))</span></span></code></pre></div>
+<h6 id="substitution-list">Substitution List</h6>
+<p>As mentioned above, this is simply a pair of an association list mapping logic variables to microKanren terms, and the next available free variable index.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Variable μKanrenTerm SubstitutionList -&gt; SubstitutionList</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Extends the sublist with the (x . v) binding</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; </span><span class="al">NOTE</span><span class="co">: Does not check for circular references! </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>sublist/extend x v s<span class="op">)</span> `<span class="op">((</span>,x . ,v<span class="op">)</span> . ,s<span class="op">))</span></span></code></pre></div>
+<p>We define a <code>walk</code> operator on a substitution list, whose purpose is to find the term a variable is associated to, if any. If the given term has no binding, or is not a variable, it is returned as is.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; μKanrenTerm SubstitutionList -&gt; μKanrenTerm</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Returns the resolved variable reference if `t` is a variable </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; and it is bound (non-circularly) in the substitutiion list. Otherwise, </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; if t is not a variable, returns it as is. Returns false in all other cases.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>walk t sublist<span class="op">)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">let</span> <span class="op">[(</span>binding <span class="op">(</span><span class="kw">and</span> <span class="op">(</span>var? t<span class="op">)</span> <span class="op">(</span><span class="kw">assp</span> <span class="op">(</span>λ <span class="op">(</span>k<span class="op">)</span> <span class="op">(</span>var=? t k<span class="op">))</span> sublist<span class="op">)))]</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>match binding</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">[</span>`<span class="op">(</span>,var . ,value<span class="op">)</span> #:when <span class="op">(</span>var? value<span class="op">)</span> <span class="op">(</span>walk value sublist<span class="op">)]</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">[</span>`<span class="op">(</span>,var . ,value<span class="op">)</span> value<span class="op">]</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      <span class="op">[_</span> t<span class="op">])))</span></span></code></pre></div>
+<p>Note that the Racket doesn’t natively provide the <code>assp</code> method, it can be found in the <code>r6rs</code> module. Or you could use this implementation:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; ∀ A, B : (A -&gt; Boolean) (AssociationListOf A B) -&gt; (PairOf A B)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Ports the scheme assp function to racket</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span><span class="kw">assp</span> pred alist<span class="op">)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for/first <span class="op">([</span>pair alist<span class="op">]</span> #:when <span class="op">(</span>pred <span class="op">(</span><span class="kw">car</span> pair<span class="op">)))</span> pair<span class="op">))</span></span></code></pre></div>
+<h6 id="goal-constructors">Goal Constructors</h6>
+<p>In microKanren, we have 4 primitive goal constructors
+- <code>==</code> (i.e unification)
+- <code>call/fresh</code> (introduces new [or “fresh”] logic variables)
+- <code>disj</code> (logical OR)
+- conj (logical AND)</p>
+<p>Let’s start with the <code>unify</code> operator.</p>
+<div class="callout question">
+<p>What is unification?
+It is the process of finding assigments to logic variables such that LHS and RHS “structurally” eqiuvalent (i.e same syntactic form)
+Eg: <code>(list 1 x) (list y 2)</code> unifies under the substitution list <code>((x . 2) (y . 1))</code>
+Informally, you can think about it like a “bidirectional” pattern match.</p>
+</div>
+<div class="callout important">
+<p>miniKanren (and microKanren) support <em>first-order unification</em>, i.e unification over first order terms (such as symbols, numnbers, pairs, lists, etc). So logic variables cannot represent functions, for example. I don’t understand this too well, but the way I see it, <em>first-order</em> here simply means <em>pure</em> syntactic forms (data) – no terms representing executable semantics.</p>
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; μKanrenTerm μKanrenTerm SubstitutionList -&gt; SubstitutionList</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Given two terms, returns the SubstitutionList under which these </span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; terms &quot;unify&quot;, false otherwise</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>unify u v sublist<span class="op">)</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">let</span> <span class="op">[(</span>u^ <span class="op">(</span>walk u sublist<span class="op">))</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>v^ <span class="op">(</span>walk v sublist<span class="op">))]</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">cond</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">[(</span><span class="kw">and</span> <span class="op">(</span>var? u^<span class="op">)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span>var? v^<span class="op">)</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span>var=? u^ v^<span class="op">))</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>       sublist<span class="op">]</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">[(</span>var? u^<span class="op">)</span> <span class="op">(</span>sublist/extend u^ v^ sublist<span class="op">)]</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">[(</span>var? v^<span class="op">)</span> <span class="op">(</span>sublist/extend v^ u^ sublist<span class="op">)]</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">[(</span><span class="kw">and</span> <span class="op">(</span><span class="kw">pair?</span> u^<span class="op">)</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span><span class="kw">pair?</span> v^<span class="op">))</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span><span class="kw">let</span> <span class="op">[(</span>sublist^ <span class="op">(</span>unify <span class="op">(</span><span class="kw">car</span> u^<span class="op">)</span> <span class="op">(</span><span class="kw">car</span> v^<span class="op">)</span> sublist<span class="op">))]</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>         <span class="co">;; Note the threaded sublist! Why is this important? -- Because</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>         <span class="co">;; elements in the tail could be the same as those in the head, and should use the bindings from earlier in the list, if they exist</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span><span class="kw">if</span> sublist^ <span class="op">(</span>unify <span class="op">(</span><span class="kw">cdr</span> u^<span class="op">)</span> <span class="op">(</span><span class="kw">cdr</span> v^<span class="op">)</span> sublist^<span class="op">)</span> <span class="dv">#f</span><span class="op">))]</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>      <span class="op">[</span><span class="kw">else</span> <span class="op">(</span><span class="kw">if</span> <span class="op">(</span><span class="kw">eqv?</span> u^ v^<span class="op">)</span> sublist <span class="dv">#f</span><span class="op">)])))</span></span></code></pre></div>
+<div class="callout important">
+<p>Notice that if we try to unify two distinct but unbound logic variables (example <code>== x y</code>), our implementation will produce a substitution list with <code>x =&gt; y</code></p>
+</div>
+<p>Now that we have <code>unify</code>, implementing <code>==</code> is fairly straightforward.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; μKanrenTerm μKanrenTerm -&gt; Goal</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Goal constructor that only contributes values if the given terms </span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; unify in the given state</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>== u v<span class="op">)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>λ <span class="op">(</span>s/c<span class="op">)</span> <span class="co">; read s/c as state/counter</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">let</span> <span class="op">[(</span>res <span class="op">(</span>unify u v <span class="op">(</span><span class="kw">car</span> s/c<span class="op">)))]</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">if</span> res </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>stream/unit `<span class="op">(</span>,res . ,<span class="op">(</span><span class="kw">cdr</span> s/c<span class="op">)))</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>stream/zero<span class="op">)))))</span></span></code></pre></div>
+<p>Note the monadic <code>stream/unit</code>, and <code>stream/zero</code> methods. I discuss this towards the end of my notes.</p>
+<h6 id="callfresh"><code>call/fresh</code></h6>
+<p>This is the primitive that allows you to introduce new logic variables.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Variable -&gt; Goal -&gt; Goal</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Binds formal parameter of f to a new logic variable and runs the </span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; body of f (which is a goal) with given substitution list and the now </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; incremented fresh variable counter</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>call/fresh f<span class="op">)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>λ <span class="op">(</span>s/c<span class="op">)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">let</span> <span class="op">[(</span>index <span class="op">(</span><span class="kw">cdr</span> s/c<span class="op">))]</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">((</span>f <span class="op">(</span>var index<span class="op">))</span> `<span class="op">(</span>,<span class="op">(</span><span class="kw">car</span> s/c<span class="op">)</span> . ,<span class="op">(</span>add1 index<span class="op">))))))</span></span></code></pre></div>
+<p>The final two goal constructors, <code>disj</code> and <code>conj</code>, are defined entirely in terms of the <code>Stream</code> monad methods.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Goal Goal -&gt; Goal</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Given two goals, produces a new goal that returns all states that</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; satisfy either of these goals</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>disj g1 g2<span class="op">)</span> <span class="op">(</span>λ <span class="op">(</span>s/c<span class="op">)</span> <span class="op">(</span>stream/mplus <span class="op">(</span>g1 s/c<span class="op">)</span> <span class="op">(</span>g2 s/c<span class="op">))))</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Goal Goal -&gt; Goal</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; interp: Given two goals, produces a new goal that returns only those states</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; that satisfy both of the goals in question</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>conj g1 g2<span class="op">)</span> <span class="op">(</span>λ <span class="op">(</span>s/c<span class="op">)</span> <span class="op">(</span>stream/bind <span class="op">(</span>g1 s/c<span class="op">)</span> g2<span class="op">)))</span></span></code></pre></div>
+<p>This warrants a slightly more detailed discussion of the <code>Stream</code> monad.</p>
+<h6 id="stream-monad">Stream Monad</h6>
+<p>Here is the entire <code>Stream</code> monad interface we use in this microKanren implementation. The implementation of this interface is what controls the search strategy.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Stream is one of:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; - '()</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; - (-&gt; Stream) [Immature Stream]</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; - (cons State Stream) [Mature Stream]</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; State -&gt; (StreamOf State)</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>stream/unit v<span class="op">)</span> <span class="op">(</span><span class="kw">list</span> v<span class="op">))</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; -&gt; (StreamOf State)</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>stream/zero<span class="op">)</span> <span class="op">(</span><span class="kw">list</span><span class="op">))</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">;; (StreamOf State) (StreamOf State) -&gt; (StreamOf State)</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>stream/mplus $1 $2<span class="op">)</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">cond</span> <span class="op">[(</span><span class="kw">null?</span> $1<span class="op">)</span> $2<span class="op">]</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">[(</span><span class="kw">procedure?</span> $1<span class="op">)</span> <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span>stream/mplus $2 <span class="op">(</span>$1<span class="op">)))]</span> <span class="co">; --&gt; SUBTLE</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">[</span><span class="kw">else</span> <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span><span class="kw">car</span> $1<span class="op">)</span> <span class="op">(</span>stream/mplus <span class="op">(</span><span class="kw">cdr</span> $1<span class="op">)</span> $2<span class="op">))]))</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">;; (StreamOf State) Goal -&gt; (StreamOf State)</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>stream/bind <span class="op">$</span> g<span class="op">)</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">cond</span> <span class="op">[(</span><span class="kw">null?</span> <span class="op">$)</span> '<span class="op">()]</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">[(</span><span class="kw">procedure?</span> <span class="op">$)</span> <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span>stream/bind <span class="op">($)</span> g<span class="op">))]</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        <span class="op">[</span><span class="kw">else</span> <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>g <span class="op">(</span><span class="kw">car</span> <span class="op">$))</span> <span class="op">(</span>stream/bind <span class="op">(</span><span class="kw">cdr</span> <span class="op">$)</span> g<span class="op">))]))</span></span></code></pre></div>
+<ul>
+<li>Firstly, note that we need “immature” streams in order to support infinite search spaces. Without it, infinite relations like <code>fives</code> below will not terminate.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>fives x<span class="op">)</span> <span class="op">(</span>disj <span class="op">(</span>== x <span class="dv">5</span><span class="op">)</span> <span class="op">(</span>fives x<span class="op">)))</span></span></code></pre></div>
+<p>In fact, <code>fives</code> as written above will not terminate <em>even with immature streams</em> unless we make a minor adjustment:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>fives x<span class="op">)</span> <span class="op">(</span>disj <span class="op">(</span>== x <span class="dv">5</span><span class="op">)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>						<span class="op">(</span><span class="kw">lambda</span> <span class="op">(</span>s/c<span class="op">)</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>							<span class="op">(</span><span class="kw">lambda</span> <span class="op">()</span> <span class="op">((</span>fives x<span class="op">)</span> s/c<span class="op">)))))</span></span></code></pre></div>
+<p>^ this transformation is called the <code>inverse-η-delay</code></p>
+<p>Another really subtle point – notice the ordering arguments near the <code>SUBTLE</code> annotation. If the ordering instead were: <code>($1) $2</code>, it could be possible that elements of the <code>$2</code> stream are never surfaced–this would happen in the case that <code>$1</code> is an infinite stream! To ensure fairness, miniKanren uses an “interleaving” search strategy, which is achieved simply by re-ordering the arguments to <code>stream/mplus</code> each time an immature stream is encountered.</p>
+<p>As an example:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>fives x<span class="op">)</span> <span class="op">(</span>disj <span class="op">(</span>== x <span class="dv">5</span><span class="op">)</span> <span class="op">(</span>λ <span class="op">(</span>s/c<span class="op">)</span> <span class="op">(</span>λ <span class="op">()</span> <span class="op">((</span>fives x<span class="op">)</span> s/c<span class="op">)))))</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>sixes x<span class="op">)</span> <span class="op">(</span>disj <span class="op">(</span>== x <span class="dv">6</span><span class="op">)</span> <span class="op">(</span>λ <span class="op">(</span>s/c<span class="op">)</span> <span class="op">(</span>λ <span class="op">()</span> <span class="op">((</span>sixes x<span class="op">)</span> s/c<span class="op">)))))</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>five-and-sixes x<span class="op">)</span> <span class="op">(</span>disj <span class="op">(</span>fives x<span class="op">)</span> <span class="op">(</span>sixes x<span class="op">)))</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="op">((</span>call/fresh fives-and-sixes<span class="op">)</span> empty-state<span class="op">)</span> <span class="co">; alternates between 5, 6</span></span></code></pre></div>
+<h4 id="reification">Reification</h4>
+<p>TODO</p>
     </section>
 </article>
 
