@@ -248,7 +248,3 @@ As an example:
 
 ((call/fresh fives-and-sixes) empty-state) ; alternates between 5, 6
 ```
-
-#### Reification
-TODO
-

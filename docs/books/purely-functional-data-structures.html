@@ -31,7 +31,8 @@
         
     </section>
     <section>
-        <h4 id="chapter-1-introduction">Chapter 1: Introduction</h4>
+        <h4 id="chapter-1-introduction">Chapter 1: Introduction;</h4>
+<h4 id="chapter-2-persistence">Chapter 2: Persistence</h4>
 <ul>
 <li>In functional languages, you get “persistence” for free</li>
 </ul>
@@ -46,18 +47,27 @@ In imperative languages, data structures rely on destructive assignment, i.e ove
 </ul></li>
 <li>Strict languages are clearly superior to lazy languages in at least one regard: analyzing runtimes, since in lazy languages, it is very, very hard to determine if a piece will ever be run</li>
 </ul>
+<div class="callout note">
+<p>You can think of ephemeral structures as those being used in a single-threaded fashion, while persistent structures are shared across multiple threads (in a read-only fashion).</p>
+</div>
 <div class="callout quote">
 <p>… from the point of view of designing and implementing efficient data structures, functional programming’s stricture against destructive updates (i.e., assignments) is a staggering handicap, tantamount to confiscating a master chef’s knives. Like knives, destructive updates can be dangerous when misused, but tremendously effective when used properly. Imperative data structures often rely on assignments in crucial ways, and so different solutions must be found for functional programs.</p>
 </div>
 <p>This book is about the fact that, even though immutability and other functional features <em>may</em> seem limiting, it is possible for purely functional data structures to be as efficient (asymptotically) as their mutable counterparts. Furthermore:</p>
 <div class="callout quote">
-<p>Until this research, it was widely believed that amortization was incompatible with persistence [DST94, Ram92]. However, we show that memoization, in the form of lazy evaluation, is the key to reconciling the two.</p>
+<p>Until this research, it was widely believed that amortization</p>
 </div>
-<h4 id="chapter-2-lazy-evalutation-and--notation">Chapter 2: Lazy Evalutation and $-notation</h4>
+<p>was incompatible with persistence [DST94, Ram92]. However, we show that memoization, in the form of lazy evaluation, is the key to reconciling the two.</p>
+<h4 id="chapter-3-some-familiar-data-structures-in-a-functional-setting">Chapter 3: Some Familiar Data Structures in a Functional Setting</h4>
+<p>TODO</p>
+<h4 id="chapter-4-lazy-evalutation-and--notation">Chapter 4: Lazy Evalutation and $-notation</h4>
 <p>Supporting lazy evaluation in a strict language involves the addition of two primitives:
 - Delay
 - Force</p>
-<p>![[Pasted image 20251210203350.png]]</p>
+<figure>
+<img src="../images/Pasted%20image%2020251210203350.png" alt="Delay and Force primitives" />
+<figcaption aria-hidden="true">Delay and Force primitives</figcaption>
+</figure>
 <ul>
 <li>Wrapping calls with delay/force is very verbose, so this chapter introduces a more succint, neater $-based syntax</li>
 <li>Prepending an expression with $ will suspend it - $ parses as far to the right as possible – you can nest suspensions – <code>$$e</code></li>
@@ -98,7 +108,72 @@ fun s ++ t = $case s of
 			$Nil =&gt; force t
 			| $Cons(x, s') =&gt; Cons(x, s' ++ t)</code></pre>
 <p>^ when this is forced, only the first step in the computation of appending the streams is performed.</p>
-<h4 id="chapter-3-amortization-and-persistence-via-lazy-evaluation">Chapter 3: Amortization and Persistence via Lazy Evaluation</h4>
+<h4 id="chapter-5-fundamentals-of-amortization">Chapter 5: Fundamentals of Amortization</h4>
+<div class="callout quote">
+<p>Implementations with good amortized bounds are often simpler and faster than implementations with equivalent worst-case bounds</p>
+</div>
+<div class="callout question">
+<p>What is amortization?
+Amortization is when you apply bounds on entire <em>sequence</em> of operations rather than a single operation. For example, you may want a sequence of <em>n</em> operations to be bounded by O(n), but this doesn’t necessarily imply that every single operation must take O(1). This allows for more flexibility in implementation.</p>
+</div>
+<p>When proving amortization bounds, you prove that <em>at any stage</em> in the computation of this sequence, the accumulated amortized costs are less than the actual accumulated costs – the difference is called the <em>accumulated savings</em>.</p>
+<h4 id="bankers-method">Banker’s Method</h4>
+<p>Each operation has a cost, allocates “credits”, and spends credits.</p>
+<p><span class="math display">\[ a_i = t_i + c_i + \bar{c_i}\]</span>
+Each credit must be allocated before it is spent, i.e <span class="math inline">\(\sum{c_i} \geq \sum{\bar{c_i}}\)</span>
+Proofs using this method need to show that the invariant above is maintained at every stage of the computation.</p>
+<div class="callout important">
+<p>Credits are associated to individual locations in the data structure</p>
+</div>
+<div class="callout important">
+<p>No credit must be spent more than once</p>
+</div>
+<h4 id="physicists-method">Physicist’s Method</h4>
+<ul>
+<li>Define a potential function <span class="math inline">\(\Phi\)</span> that assigns, to each state (i.e the state of objects in the internal representation of the data structure, after an operation is applied) a “potential” that represents a lower bound on the accumulated savings. There, the amortized cost after some step is defined to be: <span class="math display">\[ a_i = t_i + \Phi(d_i) - \Phi(d_{i-1})\]</span>
+where <span class="math inline">\(d_i\)</span> and <span class="math inline">\(d_{i-1}\)</span> are outputs of step i, i-1 repsectively.</li>
+<li>Typically, the potential function <span class="math inline">\(\Phi\)</span> so that it is intially zero and always non-negative</li>
+</ul>
+<figure>
+<img src="../images/Pasted%20image%2020251213163622.png" alt="Physicist’s method telescoping series" />
+<figcaption aria-hidden="true">Physicist’s method telescoping series</figcaption>
+</figure>
+<p>because the potential form a “telescoping series” (i.e same value alternating signs)</p>
+<h5 id="example-queues">Example: Queues</h5>
+<ul>
+<li>Queue are often implemented as a pair of lists, F and R</li>
+<li>The three main operations on a queue are:
+<ul>
+<li>head: get the first element</li>
+<li>tail: drop the first element</li>
+<li>snoc: append an element to the rear of the queue (snoc == cons to the right)</li>
+</ul></li>
+</ul>
+<pre><code>fun head(Queue {F = x::f, R = r}) = x
+
+fun tail(Queue {F = [x], R = r}) = Queue {F = rev r, R = []}
+	| tail(Queue {F = x::f, R = r}) = Queue {F = f, R = r}
+	
+fun snoc(Queue {F = [],...}, x) = Queue {F = [x], R = []}
+	| snoc(Queue {F = f, R = r}, x) = Queue {F = f, R = x::r}</code></pre>
+<p>^ not including error handling</p>
+<p>The invariant in this implementation is that F can only ever be empty if R is also empty. This means that, when tailing the queue, if F is a single element list, it gets replaced by the reverse of R (since R stores the rear of the queue _in reverse order, in order to support O(1) append)</p>
+<ul>
+<li><p>Using the banker’s method
+We define the credit invariant that the list R always has a number of credits equivalent to its length. snoc calls on non-empty queues have an amortized cost of two now, since they allocate one credit to the R list. All other operations take 1 step, except the tail calls that reverse the R list – which take m+1 steps, and spend the m credits, resulting in an amortized cost of 1!</p></li>
+<li><p>Using the physicist’s method
+Same idea, the potential function is the length of the rear list.</p></li>
+</ul>
+<div class="callout note">
+
+</div>
+<p>Note that, even though the proofs are nearly identical here, the physicist’s method is almost always simpler since all we need to do is define the potential function and then calculate. In the banker’s method, on the other hand, we need to define how many credits does each operation allocate and what the credit invariant is. Note that there are infinitely many valid credit assignments that maintain a given credit invariant, which just adds to the confusion.</p>
+<div class="callout question">
+<p>Why does this analysis break if we have persistent data structures?
+Consider a persistent queue <code>q</code>, and you call <code>tail</code> <code>n</code> times on this queue. The reason why amortized analysis breaks is that you can only ever spend the accumulated savings once! In the banker’s method, there is an invariant that credits once allocated, can only be spent once. In the physicist’s method, there is an invariant that output of a step must be the input for the next step (in order to get a telescoping series). Intuitively too, this makes sense.</p>
+</div>
+<h4 id="chapter-6-amortization-and-persistence-via-lazy-evaluation">Chapter 6: Amortization and Persistence via Lazy Evaluation</h4>
+<p>TODO</p>
     </section>
 </article>
 

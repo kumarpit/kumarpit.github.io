@@ -34,6 +34,132 @@
         <p><strong>Authors:</strong> Bharathi Ramana Joshi, William E. Byrd
 <strong>Venue:</strong> ICFP 2021 - miniKanren Workshop Series
 <strong>Paper:</strong> <a href="http://webyrd.net/scheme-2013/papers/HemannMuKanren2013.pdf">PDF</a></p>
+<p><a href="https://www.academia.edu/RegisterToDownload/academicWelcomeFlow/primaryOccupation?redirect_path=%2F71826810%2FmetaKanren_Towards_a_Relational_Metacircular_Interpreter">Paper, but there is also a thesis</a></p>
+<div class="callout quote">
+<p>metaKanren serves as a good starting point towards a full metacircular interpreter for miniKanren and precisely points out the problems in achieving full metacircularity in miniKanren</p>
+</div>
+<div class="callout question">
+<p>What is a metacircular interpreter?
+It is an interpreter that is written in the same programming language that it interprets.</p>
+</div>
+<h4 id="shallow-metacircular-interpreter">Shallow metacircular interpreter</h4>
+<p>One natural way of implementing a metacircular interpreter is by implementing features in terms of themselves – i.e a shallow embedding ([[Folding Domain-Specific Languages - Deep and Shallow Embeddings]]). This entails implementing logic variables using logic variables, disjunction using disjunction, and so on.</p>
+<div class="callout note">
+<p>In the paper, the authors refer to deep embeddings as using “first-order” semantic representations of the language. First-order here just means not using functions in representing the DSL. This is exactly parallel to the terminology used to describe languages, where in first-order languages don’t have first class functions.</p>
+</div>
+<h4 id="tinyrelationallanguage">TinyRelationalLanguage</h4>
+<p><img src="../images/Pasted%20image%2020251128204537.png" /></p>
+<p><img src="../images/Pasted%20image%2020251128204553.png" /></p>
+<div class="callout question">
+<p>Difference between interpreting logic variables vs interpreted logic variables
+Interpreting = these are logic variables <strong>in miniKanren</strong> used in the interpreter
+Interpreted = the ones in the interpreted expression (i.e
+logic variables in the TRL language)</p>
+</div>
+<p>The authors make a key distinction in terminology:</p>
+<div class="callout important">
+<p>We reserve the term ”metacircular” for an interpreter that interprets every construct it uses, and instead use the term ”self-interpreter” for an interpreter that interprets only a subset of the constructs it uses</p>
+</div>
+<p>Let’s unpack this a little bit: What this is saying is that defining a language feature in terms of the host language yields a “self-interpreter”. The interpreter for TRL below is a self-interpreter because we don’t interpret every single construct in the TRL language, and instead use miniKanren’s features as is.</p>
+<p>As I understand it, this probably also means that <em>shallow embedding a language in itself</em> will yield self-interpreters, by definition since shallow-embedding entail defining languages in terms of the host language.</p>
+<p>In contrast, deep-embedding a language in itself should yield “metacircular” interpreters (or at least interpreters that are closer to true metacircularity).</p>
+<h4 id="interpreter-for-trl">Interpreter for TRL</h4>
+<div class="sourceCode" id="cb1"><pre class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lang racket</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> minikanren<span class="op">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Relational Interpreter for TinyRelationalLanguage (TRL)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>eval-programo program out<span class="op">)</span> </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>fresh <span class="op">(</span>q ge<span class="op">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>== `<span class="op">(</span>run <span class="dv">1</span> <span class="op">(</span>,q<span class="op">)</span> ,ge<span class="op">)</span> program<span class="op">)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>symbolo q<span class="op">)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>         <span class="co">; the association list here maps interpreted logic variables to</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>         <span class="co">; interpreting logic variables -- in other words, we use miniKanren's</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>         <span class="co">; logic variables to implement logic variables in TRL</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>eval-gexpro ge `<span class="op">((</span>,q . ,out<span class="op">)))))</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>eval-gexpro expr env<span class="op">)</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>conde</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span>fresh <span class="op">(</span>e1 e2 t<span class="op">)</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>== `<span class="op">(</span>== ,e1 ,e2<span class="op">)</span> expr<span class="op">)</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>eval-texpro e1 env t<span class="op">)</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>eval-texpro e2 env t<span class="op">))]</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span>fresh <span class="op">(</span>x x1 ge<span class="op">)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>== `<span class="op">(</span>fresh <span class="op">(</span>,x<span class="op">)</span> ,ge<span class="op">)</span> expr<span class="op">)</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>symbolo x<span class="op">)</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>eval-gexpro ge `<span class="op">((</span>,x . ,x1<span class="op">)</span> . ,env<span class="op">)))]</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span>fresh <span class="op">(</span>e1 e2<span class="op">)</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>== `<span class="op">(</span>disj ,e1 ,e2<span class="op">)</span> expr<span class="op">)</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>conde</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>            <span class="op">[(</span>eval-gexpro e1 env<span class="op">)]</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>            <span class="op">[(</span>eval-gexpro e2 env<span class="op">)]))]</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span>fresh <span class="op">(</span>e1 e2<span class="op">)</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>== `<span class="op">(</span>conj ,e1 ,e2<span class="op">)</span> expr<span class="op">)</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>eval-gexpro e1 env<span class="op">)</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>eval-gexpro e2 env<span class="op">))]))</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>eval-texpro expr env val<span class="op">)</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>conde</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span>== `<span class="op">(</span><span class="kw">quote</span> ,val<span class="op">)</span> expr<span class="op">)]</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span>symbolo expr<span class="op">)</span> <span class="op">(</span>lookupo expr env val<span class="op">)]))</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>lookupo expr env val<span class="op">)</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>fresh <span class="op">(</span>x v res<span class="op">)</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>== `<span class="op">((</span>,x . ,v<span class="op">)</span> . ,res<span class="op">)</span> env<span class="op">)</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>conde</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>          <span class="op">[(</span>==  x expr<span class="op">)</span> <span class="op">(</span>== v val<span class="op">)]</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>          <span class="op">[(</span>=/= x expr<span class="op">)</span> <span class="op">(</span>lookupo expr res val<span class="op">)])))</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="co">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="co">;; Examples</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="co">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>run* <span class="op">(</span>x<span class="op">)</span> <span class="op">(</span>eval-programo `<span class="op">(</span>run <span class="dv">1</span> <span class="op">(</span>z<span class="op">)</span> <span class="op">(</span>== 'cat z<span class="op">))</span> x<span class="op">))</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co">;; Running this example produces ('cat)</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="co">;; This is an intuitive result. </span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>run* <span class="op">(</span>x<span class="op">)</span> <span class="op">(</span>eval-programo `<span class="op">(</span>run <span class="dv">1</span> <span class="op">(</span>z<span class="op">)</span> <span class="op">(</span>== ,x z<span class="op">))</span> 'cat<span class="op">))</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="co">;; Running this example produces ('cat z)</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="co">;; While 'cat seems obvious, the fact that z is also an output is interesting.</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="co">;; Notice that x is an miniKanren logic variable. Therefore, when evaluating the</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="co">;; goal expression (== ,x z), e1 is bound to the miniKanren logic variable x,</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="co">;; and since this is being run in a run* context, miniKanren will produce all</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="co">;; values that satisfy the goals in each of the branches eval-texpro. For the</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="co">;; first branch, x gets bound to `(quote ,t), and t will then go on to be bound</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="co">;; to 'cat since z is bound to 'cat (from eval-programo). In order to satisfy</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="co">;; the second goal eval-texpro, x must bound to a symbol that exists in the</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="co">;; environment (in order for lookupo to succeed). The only such symbol is z!</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="co">;; Because remember, z gets bound to 'cat in eval-programo.</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>run <span class="dv">4</span> <span class="op">(</span>e1 e2<span class="op">)</span> <span class="op">(</span>eval-programo `<span class="op">(</span>run <span class="dv">1</span> <span class="op">(</span>z<span class="op">)</span> <span class="op">(</span>disj ,e1 ,e2<span class="op">))</span> 'cat<span class="op">))</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="co">;; Running this example produces</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="co">;; '(((== '_.0 '_.0) _.1)</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="co">;;    (_.0 (== '_.1 '_.1))</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="co">;;    ((== 'cat z) _.0)</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="co">;;    (_.0 (== 'cat z)))</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="co">;; You can reason about these results with the idea that both e1, e2 are</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="co">;; miniKanren logic variables, and so look for values for them to make</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="co">;; eval-gexpro succeed!</span></span></code></pre></div>
+<div class="callout question">
+<p>As an aside, what would HtDP annotations look like for miniKanren/relational programming?</p>
+</div>
+<h5 id="problems-with-this-approach">Problems with this approach</h5>
+<ul>
+<li>Synthesizing disjunctions will always lead to branches with logic variables–this is because the inner-query (i.e the query in TRL) is always restricted to a <code>run 1</code> semantics, so we can only express queries of the form “so-and-so should be one of the answers”, never “so-and-so” should be the only answer! This is only possible with embedded <code>run *</code> semantics.</li>
+</ul>
+<div class="callout question">
+<p>Why can’t we have embedded <code>run *</code> semantics?
+Because this requires the interpreter to express conditions on the success/failures of goals, and means to aggregate all results (by determining if query variables are ground or fresh). This goes against the relational nature of the interpreter! This limitation can be overcome if we had a deep embedding because then the success/failure of goals and freshness of logic variables can be expressed as conditions on the semantic representations.</p>
+</div>
+<p>And so, we need a deep embedding of <code>miniKanren</code>!</p>
+<h4 id="metakanren">metaKanren</h4>
+<hr />
+<div class="callout note">
+<p>William had mentioned in our last meeting that having aggregation could help in achieving full meta-circular interpreter for miniKanren.</p>
+</div>
     </section>
 </article>
 
